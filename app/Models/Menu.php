@@ -18,4 +18,8 @@ class Menu extends Model
     {
         return 'slug';
     }
+    public function sales()
+    {
+        return $this->belongsToMany(Sale::class);
+    }
 }
