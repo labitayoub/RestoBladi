@@ -15,7 +15,6 @@ class CreateWaitersTable extends Migration
     {
         Schema::create('waiters', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
             $table->integer("phone_number");
             $table->boolean("status")->default(1);
             $table->timestamps();
