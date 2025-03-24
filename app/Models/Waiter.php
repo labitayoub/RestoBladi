@@ -8,5 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Waiter extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id',];
+    protected $fillable = ['user_id','phone_number','status'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

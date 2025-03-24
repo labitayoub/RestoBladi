@@ -14,7 +14,7 @@ class AddUserIdToWaitersTable extends Migration
     public function up()
     {
         Schema::table('waiters', function (Blueprint $table) {
-            //
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
         });
     }
 
@@ -26,7 +26,8 @@ class AddUserIdToWaitersTable extends Migration
     public function down()
     {
         Schema::table('waiters', function (Blueprint $table) {
-            //
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
         });
     }
 }
