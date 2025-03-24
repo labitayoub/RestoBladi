@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Role;
+use App\Models\User;
 
-class RoleSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,19 +15,25 @@ class RoleSeeder extends Seeder
     public function run()
     {
         
-        Role::insert([
+        User::insert([
             [
                 'id' => 1,
                 'name' => 'admin',
+                'email' => 'admin@restobladi.com',
+                'password' => bcrypt('password1234'),
+                'role_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id' => 2,
                 'name' => 'waiter',
+                'email' =>'waiter@restobladi.com',
+                'password' => bcrypt('password1234'),
+                'role_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
+            ],  
         ]);
     }
 }
