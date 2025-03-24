@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Waiter extends Model
 {
     use HasFactory;
+    protected $fillable = ['user_id',];
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWaitersTable extends Migration
+class AddUserIdToWaitersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateWaitersTable extends Migration
      */
     public function up()
     {
-        Schema::create('waiters', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->integer("phone_number");
-            $table->boolean("status")->default(1);
-            $table->timestamps();
+        Schema::table('waiters', function (Blueprint $table) {
+            //
         });
     }
 
@@ -30,8 +26,7 @@ class CreateWaitersTable extends Migration
     public function down()
     {
         Schema::table('waiters', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
+            //
         });
     }
 }
