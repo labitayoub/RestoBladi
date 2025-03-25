@@ -1,59 +1,95 @@
-@extends('layouts.auth')
-
-@section('title', 'Login')
+@extends('layouts.app')
 
 @section('content')
+<div class="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            <i class="fas fa-hamburger text-orange-500 mr-2"></i>Connectez-vous à RestoBladi
+        </h2>
+    </div>
 
-    <section class="py-16 bg-gray-100">
-        <div class="container mx-auto px-4">
-            <div class="max-w-md mx-auto bg-blue-50 shadow-lg rounded-lg p-6">
-                <h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">Connectez-vous à votre compte</h2>
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <form method="POST" action="{{ route('login') }}" class="space-y-6">
+                @csrf
 
-                <form action="{{ route('login') }}" method="POST">
-                    @csrf
-
-                    <div class="mb-4">
-                        <label class="block text-blue-700">Adresse e-mail</label>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}"
-                            placeholder="Entrez votre e-mail"
-                            class="w-full px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">
+                        Adresse E-mail
+                    </label>
+                    <div class="mt-1">
+                        <input id="email" name="email" type="email" 
+                               autocomplete="email" required 
+                               value="{{ old('email') }}"
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm
+                               @error('email') border-red-500 @enderror">
+                        
                         @error('email')
-                            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
+                </div>
 
-                    <div class="mb-4">
-                        <label class="block text-blue-700">Mot de passe</label>
-                        <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe"
-                            class="w-full px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('password') border-red-500 @enderror">
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">
+                        Mot de passe
+                    </label>
+                    <div class="mt-1">
+                        <input id="password" name="password" type="password" 
+                               autocomplete="current-password" required
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm
+                               @error('password') border-red-500 @enderror">
+                        
                         @error('password')
-                            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
+                </div>
 
-                    <div class="mb-6 flex items-center justify-between">
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}
-                                class="form-checkbox h-5 w-5 text-blue-500">
-                            <span class="ml-2 text-blue-700">Se souvenir de moi</span>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember_me" name="remember" type="checkbox" 
+                               class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded">
+                        <label for="remember_me" class="ml-2 block text-sm text-gray-900">
+                            Rester connecté
                         </label>
-
-                        <a href="#" class="text-blue-500 hover:underline">
-                            Mot de passe oublié ?
-                        </a>
                     </div>
 
-                    <button type="submit"
-                        class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
-                        Connexion
-                    </button>
+                    @if (Route::has('password.request'))
+                        <div class="text-sm">
+                            <a href="{{ route('password.request') }}" class="font-medium text-orange-600 hover:text-orange-500">
+                                Mot de passe oublié ?
+                            </a>
+                        </div>
+                    @endif
+                </div>
 
-                    <p class="mt-4 text-center text-gray-600">
-                        Vous n'avez pas de compte ? <a href="{{ route('register.form') }}"
-                            class="text-blue-500 hover:underline">Inscrivez-vous ici</a>.
-                    </p>
-                </form>
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+                        Se connecter
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">
+                            Pas encore de compte ?
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <a href="{{ route('register') }}" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-orange-600 bg-white hover:bg-gray-50 border-orange-600">
+                        Créer un compte
+                    </a>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</div>
 @endsection
