@@ -39,13 +39,15 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $this->validate($request, [
-            "title"=>"required|string|max:255",
+            "title"=>"required|string|max:255|unique:categories"
         ]);
 
         Category::create([
-            "title"=> $title,
-            "slug"=>$Str::slug($title)
+
+            "title"=> $request->title,
+            "slug"=>Str::slug($request->title)
         ]);
+        return redirect()->route("categories.index")->with("success", "categorie ajoute avec succes");
     }
 
     /**
@@ -67,7 +69,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view("admin.gestion.categoreis.edit")->with("category", $category);
     }
 
     /**
@@ -79,7 +81,15 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $this->validate($request, [
+            "title"=>"required|string|max:255|unique:categories"
+        ]);
+
+        $category->update([
+            "title"=> $request->title,
+            "slug"=>Str::slug($request->title)
+        ]);
+        return redirect()->route("categories.index")->with("success", "categorie modifie avec succes");
     }
 
     /**
@@ -90,6 +100,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return redirect()->route("categories.index")->with("success", "categorie supprime avec succes");
     }
 }
