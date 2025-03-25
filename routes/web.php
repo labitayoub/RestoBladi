@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\TableController;
+use App\Http\Controllers\WaiterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +18,7 @@ use App\Http\Controllers\CategoryController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -43,10 +47,15 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-// Route::resource('categories', CategoryControllev::class);
-Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
-Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
-Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
+Route::resource('categories', CategoryController::class);
+Route::resource('menus', MenuController::class);
+Route::resource('tables', TableController::class);
+Route::resource('menus', MenuController::class);
+Route::resource('waiters', WaiterController::class);
+
+// Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+// Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+// Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
 
 Route::fallback(function () {
     return view('errors.404');

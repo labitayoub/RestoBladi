@@ -17,7 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         
-        return view("admin.gestion.categories.index")->with([
+        return view("manager.gestion.categories.index")->with([
             "categories" => Category::paginate(6)]);
     }
 
@@ -28,7 +28,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view("admin.gestion.categories.create");
+        return view("manager.gestion.categories.create");
     }
 
     /**
@@ -66,7 +66,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view("admin.gestion.categories.edit")->with("category", $category);
+        return view("manager.gestion.categories.edit")->with("category", $category);
     }
 
     /**

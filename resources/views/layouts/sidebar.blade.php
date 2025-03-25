@@ -11,17 +11,17 @@
             <span class="ml-2 font-medium">Catégories</span>
         </a>
         
-        <a href="{{ route('categories.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
+        <a href="{{ route('menus.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
             <i class="fas fa-clipboard-list w-6 text-orange-500"></i>
             <span class="ml-2 font-medium">Menus</span>
         </a>
         
-        <a href="{{ route('categories.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
+        <a href="{{ route('tables.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
             <i class="fas fa-chair w-6 text-orange-500"></i>
             <span class="ml-2 font-medium">Tables</span>
         </a>
         
-        <a href="{{ route('categories.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
+        <a href="{{ route('serveurs.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
             <i class="fas fa-user-cog w-6 text-orange-500"></i>
             <span class="ml-2 font-medium">Sérveurs</span>
         </a>
