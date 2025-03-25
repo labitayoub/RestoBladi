@@ -17,8 +17,8 @@
                             </h3>
                         </div>
                         
-                        <form action="{{ route('categories.store') }}" method="post">
-                            @csrf
+                        <form action="{{ route('categories.store') }}" method="post" class="space-y-6">
+                           @csrf
                             
                             <div class="mb-6">
                                 <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Titre de la catégorie</label>

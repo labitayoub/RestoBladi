@@ -43,7 +43,10 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::resource('categories', CategoryController::class);
+// Route::resource('categories', CategoryControllev::class);
+Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
+Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
 
 Route::fallback(function () {
     return view('errors.404');

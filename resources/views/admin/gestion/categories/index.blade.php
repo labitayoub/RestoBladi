@@ -48,10 +48,10 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                                 <div class="flex justify-center space-x-2">
-                                                    <a href="{{ route('categories.edit', $category->slug) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out">
+                                                    <a href="{{ route('categories.index', $category->slug) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <form id="{{ $category->id }}" action="{{ route('categories.destroy', $category->slug) }}" method="post">
+                                                    <form id="{{ $category->id }}" action="{{ route('categories.index', $category->slug) }}" method="post">
                                                         @csrf
                                                         @method("DELETE")
                                                         <button
