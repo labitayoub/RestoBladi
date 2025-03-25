@@ -38,16 +38,13 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $this->validate($request, [
-            "title"=>"required|string|max:255|unique:categories"
-        ]);
 
+        $title = $request->title;
         Category::create([
-
-            "title"=> $request->title,
-            "slug"=>Str::slug($request->title)
+            "title"=> $title,
+            "slug"=>Str::slug($title)
         ]);
-        return redirect()->route("categories.index")->with("success", "categorie ajoute avec succes");
+        return redirect()->route("categories.index")->with("success", "categorie cree avec succes");
     }
 
     /**

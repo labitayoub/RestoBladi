@@ -72,7 +72,6 @@
                             </table>
                         </div>
                         
-                        <!-- Pagination (if needed) -->
                         @if(isset($categories) && method_exists($categories, 'links'))
                             <div class="mt-4">
                                 {{ $categories->links() }}
