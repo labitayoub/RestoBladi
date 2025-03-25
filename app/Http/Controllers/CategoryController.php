@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 
@@ -37,7 +38,14 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $this->validate($request, [
+            "title"=>"required|string|max:255",
+        ]);
+
+        Category::create([
+            "title"=> $title,
+            "slug"=>$Str::slug($title)
+        ]);
     }
 
     /**
