@@ -19,24 +19,22 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-// Other static pages
-Route::get('/courses', function () {
-    return view('courses');
-})->name('courses');
+// Route::get('/courses', function () {
+//     return view('courses');
+// })->name('courses');
 
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
+// Route::get('/about', function () {
+//     return view('about');
+// })->name('about');
 
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
+// Route::get('/contact', function () {
+//     return view('contact');
+// })->name('contact');
 
-Route::get('/dashboard', function () {
-    return view('admin/dashboard');
-})->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('admin/dashboard');
+// })->name('dashboard');
 
-// Authentication routes
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register.form');
 Route::post('register', [RegisterController::class, 'register'])->name('register');
 
