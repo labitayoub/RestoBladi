@@ -1,24 +1,29 @@
-<ul class="list-group mb-3">
-    <a href="{{ route("categories.index") }}" class="list-group-item
-        font-weight-bold list-group-item-action
-        list-group-item-light">
-        <i class="fas fa-th-list"></i>
-            Catégories
-    </a>
-    <a href="{{ route("menus.index") }}" class="list-group-item
-        font-weight-bold list-group-item-action
-        list-group-item-light">
-        <i class="fas fa-clipboard-list"></i>
-            Menus</a>
-    <a href="{{ route("tables.index") }}" class="list-group-item
-        font-weight-bold list-group-item-action
-        list-group-item-light">
-        <i class="fas fa-chair"></i>
-        Tables</a>
-    <a href="{{ route("servants.index") }}" class="list-group-item
-        font-weight-bold list-group-item-action
-        list-group-item-light">
-        <i class="fas fa-user-cog"></i>
-        Sérveurs
-    </a>
-</ul>
+<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+    <div class="p-4 bg-orange-50 border-b border-orange-100">
+        <h3 class="text-lg font-semibold text-orange-600">
+            <i class="fas fa-utensils mr-2"></i>Administration
+        </h3>
+    </div>
+
+    <nav class="mt-2">
+        <a href="{{ route('categories.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
+            <i class="fas fa-th-list w-6 text-orange-500"></i>
+            <span class="ml-2 font-medium">Catégories</span>
+        </a>
+        
+        <a href="{{ route('categories.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
+            <i class="fas fa-clipboard-list w-6 text-orange-500"></i>
+            <span class="ml-2 font-medium">Menus</span>
+        </a>
+        
+        <a href="{{ route('categories.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
+            <i class="fas fa-chair w-6 text-orange-500"></i>
+            <span class="ml-2 font-medium">Tables</span>
+        </a>
+        
+        <a href="{{ route('categories.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
+            <i class="fas fa-user-cog w-6 text-orange-500"></i>
+            <span class="ml-2 font-medium">Sérveurs</span>
+        </a>
+    </nav>
+</div>

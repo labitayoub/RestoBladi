@@ -77,17 +77,6 @@
 @endif
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Handle manual close buttons
-        const closeButtons = document.querySelectorAll('.close-alert');
-        closeButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const alert = this.closest('[role="alert"]');
-                alert.remove();
-            });
-        });
-        
-        // Auto-hide all alerts after 5 seconds
         const allAlerts = document.querySelectorAll('[role="alert"], .bg-red-50');
         if (allAlerts.length > 0) {
             setTimeout(function() {
