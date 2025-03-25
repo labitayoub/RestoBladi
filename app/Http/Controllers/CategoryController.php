@@ -78,13 +78,11 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $this->validate($request, [
-            "title"=>"required|string|max:255|unique:categories"
-        ]);
+        $form = $request->validated();
 
         $category->update([
-            "title"=> $request->title,
-            "slug"=>Str::slug($request->title)
+            "title"=> $form["title"],
+            "slug"=>Str::slug($form["title"])
         ]);
         return redirect()->route("categories.index")->with("success", "categorie modifie avec succes");
     }
