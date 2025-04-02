@@ -14,7 +14,10 @@ class WaiterFactory extends Factory
     public function definition()
     {
         return [
-            //
+            // 'phone_number' => $this->faker->phoneNumber,
+            // 'status' => $this->faker->randomElement([1, 0]),
+            // 'manager_id' => \App\Models\Manager::factory(),
+            // 'user_id' => \App\Models\User::factory(),
         ];
     }
 }
