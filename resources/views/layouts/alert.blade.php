@@ -77,6 +77,7 @@
 @endif
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
         const allAlerts = document.querySelectorAll('[role="alert"], .bg-red-50');
         if (allAlerts.length > 0) {
             setTimeout(function() {
@@ -91,6 +92,21 @@
                 });
             }, 3000); // 3 seconds delay
         }
+
+        // Close alert manually
+        const closeButtons = document.querySelectorAll('.close-alert');
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const alert = this.closest('[role="alert"], .bg-red-50');
+                if (alert) {
+                    alert.style.transition = 'opacity 0.5s ease';
+                    alert.style.opacity = '0';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                }
+            });
+        });
 
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

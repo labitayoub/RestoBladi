@@ -1,7 +1,7 @@
 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
     <div class="p-4 bg-orange-50 border-b border-orange-100">
         <h3 class="text-lg font-semibold text-orange-600">
-            <i class="fas fa-utensils mr-2"></i>Administration
+            <i class="fas fa-utensils mr-2"></i>Management
         </h3>
     </div>
 
