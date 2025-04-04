@@ -15,7 +15,8 @@ class WaiterController extends Controller
      */
     public function index()
     {
-        //
+        return view("manager.gestion.waiters.index")->with([
+            "waiters" => Waiter::paginate(6)]);
     }
 
     /**
