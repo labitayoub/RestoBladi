@@ -46,6 +46,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Waiter::class);
     }
+    public function manager()
+    {
+        return $this->hasOne(Manager::class);
+    }
     public function role()
     {
         return $this->belongsTo(Role::class);

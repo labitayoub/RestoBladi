@@ -11,7 +11,7 @@ class Manager extends Model
 
     protected $table = 'managers';
 
-    protected $fillable = ['user_id','status','RestaurantName',];
+    protected $fillable = ['user_id','status'];
 
     public function user()
     {
