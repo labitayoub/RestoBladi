@@ -18,9 +18,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-        return view("manager.gestion.menus.index",)->with([
-            "menus =>Menu::paginate(6)"
-    
+        return view("manager.gestion.menus.index")->with([
+            "menus" => Menu::paginate(6)
         ]);
     }
 
