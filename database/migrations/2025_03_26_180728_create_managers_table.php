@@ -18,6 +18,9 @@ class CreateManagersTable extends Migration
             $table->string('status');
             $table->bigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('restaurant_id')->unique();
+            $table->foreign('restaurant_id')->references('id')->on('restaurants')->onDelete('cascade');
+            
             $table->timestamps();
         });
     }
