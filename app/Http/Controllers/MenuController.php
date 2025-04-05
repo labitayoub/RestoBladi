@@ -107,7 +107,6 @@ class MenuController extends Controller
      */
     public function update(Request $request, Menu $menu)
     {
-        //
         //validation
         $this->validate($request, [
             "title" => "required|min:3|unique:menus,title," . $menu->id,
@@ -116,39 +115,37 @@ class MenuController extends Controller
             "price" => "required|numeric",
             "category_id" => "required|numeric",
         ]);
-        //store data
+        
+        $title = $request->title;
+        $updateData = [
+            "title" => $title,
+            "slug" => Str::slug($title),
+            "description" => $request->description,
+            "price" => $request->price,
+            "category_id" => $request->category_id
+        ];
+        
+        // Traitement de l'image si une nouvelle est fournie
         if ($request->hasFile("image")) {
+            // Supprimer l'ancienne image
             unlink(public_path('images/menus/' . $menu->image));
+            
+            // Traiter la nouvelle image
             $file = $request->image;
             $imageName = time() . "_" . $file->getClientOriginalName();
             $file->move(public_path('images/menus'), $imageName);
-            $title = $request->title;
-            Menu::create([
-                "title" => $title,
-                "slug" => Str::slug($title),
-                "description" =>  $request->description,
-                "price" =>  $request->price,
-                "category_id" =>  $request->category_id,
-                "image" =>  $imageName,
-            ]);
-            //redirect user
-            return redirect()->route("menus.index")->with([
-                "success" => "menu modifié avec succés"
-            ]);
-        } else {
-            $title = $request->title;
-            $menu->update([
-                "title" => $title,
-                "slug" => Str::slug($title),
-                "description" =>  $request->description,
-                "price" =>  $request->price,
-                "category_id" =>  $request->category_id
-            ]);
-            //redirect user
-            return redirect()->route("menus.index")->with([
-                "success" => "menu modifié avec succés"
-            ]);
+            
+            // Ajouter l'image au tableau de mise à jour
+            $updateData["image"] = $imageName;
         }
+        
+        // Mise à jour du menu avec les données
+        $menu->update($updateData);
+        
+        // Redirection avec message de succès
+        return redirect()->route("menus.index")->with([
+            "success" => "menu modifié avec succés"
+        ]);
     }
 
     /**
