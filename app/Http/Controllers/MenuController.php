@@ -18,7 +18,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        return view("manager.gestion.index")->with([
+        return view("manager.gestion.menus.index")->with([
             "menus =>Menu::paginate(6)"
     
         ]);
@@ -93,7 +93,7 @@ class MenuController extends Controller
     public function edit(Menu $menu)
     {
         //
-        return view("managments.menus.edit")->with([
+        return view("manager.gestion.menus.edit")->with([
             "categories" => Category::all(),
             "menu" => $menu
         ]);
