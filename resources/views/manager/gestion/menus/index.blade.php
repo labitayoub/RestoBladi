@@ -33,52 +33,60 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($menus as $menu)
+                                        @if(isset($menus) && count($menus) > 0)
+                                            @foreach ($menus as $menu)
+                                                <tr>
+                                                    <td>
+                                                        {{ $menu->id }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $menu->title }}
+                                                    </td>
+                                                    <td>
+                                                        {{ substr($menu->description,0,100)}}
+                                                    </td>
+                                                    <td>
+                                                        {{ $menu->price}} DH
+                                                    </td>
+                                                    <td>
+                                                        {{ $menu->category->title}}
+                                                    </td>
+                                                    <td>
+                                                        <img src="{{ asset("images/menus/". $menu->image) }}" alt="{{ $menu->title}}"
+                                                            class="fluid rounded" width="60" height="60"
+                                                        >
+                                                    </td>
+                                                    <td class="d-flex flex-row justify-content-center align-items-center">
+                                                        <a href="{{ route("menus.edit",$menu->slug) }}" class="btn btn-warning mr-1">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <form id="{{ $menu->id }}" action="{{ route("menus.destroy",$menu->slug) }}" method="post">
+                                                            @csrf
+                                                            @method("DELETE")
+                                                            <button
+                                                                onclick="
+                                                                    event.preventDefault();
+                                                                    if(confirm('Voulez vous supprimer le menu {{ $menu->title }} ?'))
+                                                                    document.getElementById({{ $menu->id }}).submit()
+                                                                "
+                                                                class="btn btn-danger">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
                                             <tr>
-                                                <td>
-                                                    {{ $menu->id }}
-                                                </td>
-                                                <td>
-                                                    {{ $menu->title }}
-                                                </td>
-                                                <td>
-                                                    {{ substr($menu->description,0,100)}}
-                                                </td>
-                                                <td>
-                                                    {{ $menu->price}} DH
-                                                </td>
-                                                <td>
-                                                    {{ $menu->category->title}}
-                                                </td>
-                                                <td>
-                                                    <img src="{{ asset("images/menus/". $menu->image) }}" alt="{{ $menu->title}}"
-                                                        class="fluid rounded" width="60" height="60"
-                                                    >
-                                                </td>
-                                                <td class="d-flex flex-row justify-content-center align-items-center">
-                                                    <a href="{{ route("menus.edit",$menu->slug) }}" class="btn btn-warning mr-1">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <form id="{{ $menu->id }}" action="{{ route("menus.destroy",$menu->slug) }}" method="post">
-                                                        @csrf
-                                                        @method("DELETE")
-                                                        <button
-                                                            onclick="
-                                                                event.preventDefault();
-                                                                if(confirm('Voulez vous supprimer le menu {{ $menu->title }} ?'))
-                                                                document.getElementById({{ $menu->id }}).submit()
-                                                            "
-                                                            class="btn btn-danger">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </td>
+                                                <td colspan="7" class="text-center">Aucun menu disponible</td>
                                             </tr>
-                                        @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                                 <div class="my-3 d-flex justify-content-center align-items-center">
-                                    {{ $menus->links() }}
+                                    @if(isset($menus))
+                                        {{ $menus->links() }}
+                                    @endif
                                 </div>
                             </div>
                         </div>
