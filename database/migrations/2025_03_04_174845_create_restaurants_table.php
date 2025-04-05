@@ -17,7 +17,7 @@ class CreateRestaurantsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('Address');
+            $table->string('address');
             $table->string('phone_number');
             $table->timestamps();
         });

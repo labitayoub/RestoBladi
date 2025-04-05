@@ -11,12 +11,25 @@ class Manager extends Model
 
     protected $table = 'managers';
 
-    protected $fillable = ['user_id','status'];
+    protected $fillable = [
+        'status',
+        'user_id',
+        'restaurant_id'
+    ];
 
+    /**
+     * Get the user that owns the manager.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-
+    /**
+     * Get the restaurant associated with the manager.
+     */
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
 }
