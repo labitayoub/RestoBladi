@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\WaiterController;
+use App\Http\Controllers\ManagerController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Menu;
 use App\Models\Table;
