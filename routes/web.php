@@ -7,6 +7,12 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\WaiterController;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Menu;
+use App\Models\Table;
+use App\Models\Waiter;
+use App\Models\User;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,9 +41,24 @@ Route::get('/', function () {
 //     return view('contact');
 // })->name('contact');
 
-// Route::get('/dashboard', function () {
-//     return view('admin/dashboard');
-// })->name('dashboard');
+// Dashboard route
+Route::get('/dashboard', function () {
+    // Check if user is authenticated and redirect accordingly
+    if (Auth::check()) {
+        $user = Auth::user();
+        // Assuming role_id 2 is for managers
+        if ($user->role_id == 2) {
+            return view('manager.dashboard');
+        } 
+        // Add other role conditions as needed
+        else {
+            return view('manager.dashboard'); // Default to manager dashboard for now
+        }
+    }
+    
+    // If not authenticated, redirect to login
+    return redirect()->route('login');
+})->name('dashboard')->middleware('auth');
 
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register.form');
 Route::post('register', [RegisterController::class, 'register'])->name('register');
@@ -51,8 +72,7 @@ Route::resource('categories', CategoryController::class);
 Route::resource('menus', MenuController::class);
 Route::resource('tables', TableController::class);
 Route::resource('menus', MenuController::class);
-Route::resource('waiters', WaiterController::class);
-
+Route::resource('waiters', WaiterController::class)->middleware('auth');
 // Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
 // Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
 // Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');

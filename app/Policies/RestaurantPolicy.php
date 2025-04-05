@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Manager;
+use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ManagerPolicy
+class RestaurantPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class ManagerPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Manager $manager)
+    public function view(User $user, Restaurant $restaurant)
     {
         //
     }
@@ -48,10 +48,10 @@ class ManagerPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Manager $manager)
+    public function update(User $user, Restaurant $restaurant)
     {
         //
     }
@@ -60,10 +60,10 @@ class ManagerPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Manager $manager)
+    public function delete(User $user, Restaurant $restaurant)
     {
         //
     }
@@ -72,10 +72,10 @@ class ManagerPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Manager $manager)
+    public function restore(User $user, Restaurant $restaurant)
     {
         //
     }
@@ -84,10 +84,10 @@ class ManagerPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Manager $manager)
+    public function forceDelete(User $user, Restaurant $restaurant)
     {
         //
     }

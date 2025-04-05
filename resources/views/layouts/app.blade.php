@@ -32,6 +32,18 @@
                                 <i class="fas fa-hamburger mr-2"></i>RestoBladi
                             </a>
                         </div>
+
+                        <!-- Primary Nav -->
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <a href="{{ route('welcome') }}" class="border-transparent text-gray-600 hover:text-orange-600 hover:border-orange-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Accueil
+                            </a>
+                            @auth
+                                <a href="{{ route('dashboard') }}" class="border-transparent text-gray-600 hover:text-orange-600 hover:border-orange-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                    <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
+                                </a>
+                            @endauth
+                        </div>
                     </div>
 
                     <!-- Navigation Links -->
@@ -80,6 +92,14 @@
             <!-- Mobile menu, show/hide based on menu state. -->
             <div class="mobile-menu hidden sm:hidden">
                 <div class="pt-2 pb-3 space-y-1">
+                    <a href="{{ route('welcome') }}" class="text-gray-600 hover:bg-gray-50 hover:text-orange-600 block px-3 py-2 rounded-md text-base font-medium">
+                        Accueil
+                    </a>
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="text-gray-600 hover:bg-gray-50 hover:text-orange-600 block px-3 py-2 rounded-md text-base font-medium">
+                            <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
+                        </a>
+                    @endauth
                     @guest
                         <a href="{{ route('login') }}" class="text-gray-600 hover:bg-gray-50 hover:text-orange-600 block px-3 py-2 rounded-md text-base font-medium">
                             Connexion

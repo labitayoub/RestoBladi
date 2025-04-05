@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Manager;
-use App\Http\Requests\StoreManagerRequest;
-use App\Http\Requests\UpdateManagerRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Restaurant;
+use App\Http\Requests\StoreRestaurantRequest;
+use App\Http\Requests\UpdateRestaurantRequest;
 
-class ManagerController extends Controller
+class RestaurantController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class ManagerController extends Controller
      */
     public function index()
     {
-        $managers = Manager::with('user_id'=Auth::user()->)->get();
+        //
     }
 
     /**
@@ -32,10 +31,10 @@ class ManagerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreManagerRequest  $request
+     * @param  \App\Http\Requests\StoreRestaurantRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreManagerRequest $request)
+    public function store(StoreRestaurantRequest $request)
     {
         //
     }
@@ -43,10 +42,10 @@ class ManagerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Http\Response
      */
-    public function show(Manager $manager)
+    public function show(Restaurant $restaurant)
     {
         //
     }
@@ -54,10 +53,10 @@ class ManagerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Http\Response
      */
-    public function edit(Manager $manager)
+    public function edit(Restaurant $restaurant)
     {
         //
     }
@@ -65,11 +64,11 @@ class ManagerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateManagerRequest  $request
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Http\Requests\UpdateRestaurantRequest  $request
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateManagerRequest $request, Manager $manager)
+    public function update(UpdateRestaurantRequest $request, Restaurant $restaurant)
     {
         //
     }
@@ -77,10 +76,10 @@ class ManagerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Manager  $manager
+     * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Manager $manager)
+    public function destroy(Restaurant $restaurant)
     {
         //
     }
