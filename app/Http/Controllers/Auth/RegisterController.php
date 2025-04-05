@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Manager;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,6 +28,12 @@ class RegisterController extends Controller
         
         // dd($user);
 
+        Manager::create([
+            'user_id' => $user->id,
+            'status' => 'active',
+
+        ]);
+
         return redirect()->route('login')->with('success', 'Registration successful! Please login.');
     }
     
@@ -45,6 +52,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role_id' => 2,
         ]);
     }
 }
