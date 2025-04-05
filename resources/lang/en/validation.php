@@ -142,9 +142,11 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'title' => [
+            'required' => 'Le champ titre est obligatoire',
+            'unique' => 'Le titre existe déjà',
         ],
+   
     ],
 
     /*
