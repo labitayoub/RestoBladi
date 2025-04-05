@@ -16,7 +16,7 @@ class ManagerController extends Controller
      */
     public function index()
     {
-        $managers = Manager::with('user_id'=Auth::user()->)->get();
+        //
     }
 
     /**
