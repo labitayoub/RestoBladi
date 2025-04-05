@@ -169,8 +169,16 @@ return [
         'status' => [
             'required' => 'Le champ disponibilité est obligatoire',
         ],
-
-
+        
+        'menu_id' => [
+            'required' => 'Le champ menu est obligatoire',
+        ],
+        'table_id' => [
+            'required' => 'Le champ table est obligatoire',
+        ],
+        'change' => [
+            'required' => 'Le champ reste est obligatoire',
+        ],
    
     ],
 
