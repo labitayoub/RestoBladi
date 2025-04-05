@@ -146,6 +146,10 @@ return [
             'required' => 'Le champ titre est obligatoire',
             'unique' => 'Le titre existe déjà',
         ],
+        'description' => [
+            'required' => 'Le champ description est obligatoire',
+        ],
+
    
     ],
 
