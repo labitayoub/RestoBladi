@@ -158,7 +158,19 @@ return [
             'mimes' => 'Seuls les fichiers : :values sont accéptés',
             'uploaded' => 'la taille du fichier :attribute ne doit pas dépasser 2mg',
         ],
-    
+        'category_id' => [
+            'required' => 'Le champ catégorie est obligatoire',
+        ],
+
+        'name' => [
+            'required' => 'Le champ nom est obligatoire',
+            'unique' => 'Le nom existe déjà',
+        ],
+        'status' => [
+            'required' => 'Le champ disponibilité est obligatoire',
+        ],
+
+
    
     ],
 
