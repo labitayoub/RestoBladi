@@ -149,7 +149,16 @@ return [
         'description' => [
             'required' => 'Le champ description est obligatoire',
         ],
-
+        'price' => [
+            'required' => 'Le champ prix est obligatoire',
+        ],
+        'image' => [
+            'required' => 'Le champ image est obligatoire',
+            'image' => 'Veuillez choisir une image valide',
+            'mimes' => 'Seuls les fichiers : :values sont accéptés',
+            'uploaded' => 'la taille du fichier :attribute ne doit pas dépasser 2mg',
+        ],
+    
    
     ],
 
