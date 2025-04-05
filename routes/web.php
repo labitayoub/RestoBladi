@@ -69,11 +69,13 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::resource('categories', CategoryController::class);
-Route::resource('menus', MenuController::class);
-Route::resource('tables', TableController::class);
-Route::resource('menus', MenuController::class);
-Route::resource('waiters', WaiterController::class)->middleware('auth');
+Route::middleware('auth')->group(function() {
+    Route::resource('categories', CategoryController::class);
+    Route::resource('menus', MenuController::class);
+    Route::resource('tables', TableController::class);
+    Route::resource('waiters', WaiterController::class);
+});
+
 // Route::post('categories', [CategoryController::class, 'store'])->name('categories.store');
 // Route::get('categories', [CategoryController::class, 'index'])->name('categories.index');
 // Route::get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
