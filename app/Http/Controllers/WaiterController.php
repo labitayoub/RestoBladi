@@ -59,7 +59,7 @@ class WaiterController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role_id' => 3, // Assuming 3 is the role ID for waiters
+                'role_id' => 3,
             ]);
             
             // Convert status string to boolean (active=1, inactive=0)
