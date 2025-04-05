@@ -29,7 +29,7 @@
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 @error('title') border-red-500 @enderror"
                                     placeholder="Entrez le titre du menu"
                                     value="{{ old('title') }}"
-                                    required
+                                    
                                 >
                                 @error('title')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -44,7 +44,7 @@
                                     rows="5"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 @error('description') border-red-500 @enderror"
                                     placeholder="Entrez la description du menu"
-                                    required
+                                    
                                 >{{ old('description') }}</textarea>
                                 @error('description')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -65,7 +65,7 @@
                                         class="w-full pl-12 pr-12 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 @error('price') border-red-500 @enderror"
                                         placeholder="0.00"
                                         value="{{ old('price') }}"
-                                        required
+                                        
                                     >
                                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                         <span class="text-gray-500 sm:text-sm">.00</span>
@@ -86,7 +86,7 @@
                                             name="image" 
                                             id="image"
                                             class="sr-only @error('image') border-red-500 @enderror"
-                                            required
+                                            
                                         >
                                     </label>
                                     <span class="text-sm text-gray-500" id="file-name">Aucun fichier sélectionné (2MB max)</span>
@@ -102,7 +102,7 @@
                                     name="category_id"
                                     id="category_id"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 @error('category_id') border-red-500 @enderror"
-                                    required
+                                    
                                 >
                                     <option value="" selected disabled>Choisir une catégorie</option>
                                     @foreach ($categories as $category)
