@@ -504,4 +504,123 @@
         </div>
     </div>
     
-   
+    <script>
+        function print(id) {
+            const printContents = document.getElementById(id).innerHTML;
+            const originalContents = document.body.innerHTML;
+            
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            
+            // Reload page after printing
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tabs functionality
+            const tabs = document.querySelectorAll('[data-toggle="pill"]');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Hide all tab panes
+                    document.querySelectorAll('.tab-pane').forEach(pane => {
+                        pane.classList.add('hidden');
+                        pane.classList.remove('block');
+                    });
+                    
+                    // Remove active class from all tabs
+                    tabs.forEach(t => {
+                        t.classList.remove('border-orange-500', 'text-orange-600');
+                        t.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                        t.setAttribute('aria-selected', 'false');
+                    });
+                    
+                    // Add active class to current tab
+                    this.classList.add('border-orange-500', 'text-orange-600');
+                    this.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    this.setAttribute('aria-selected', 'true');
+                    
+                    // Show current tab pane
+                    const target = this.getAttribute('href').substring(1);
+                    document.getElementById(target).classList.remove('hidden');
+                    document.getElementById(target).classList.add('block');
+                });
+            });
+            
+            // Calculate change automatically
+            const totalReceived = document.getElementById('total_received');
+            const totalTtc = document.getElementById('total_ttc');
+            const change = document.getElementById('change');
+            
+            totalReceived.addEventListener('input', calculateChange);
+            totalTtc.addEventListener('input', calculateChange);
+            
+            function calculateChange() {
+                if(totalReceived.value && totalTtc.value) {
+                    change.value = (parseFloat(totalReceived.value) - parseFloat(totalTtc.value)).toFixed(2);
+                }
+            }
+            
+            // Table search functionality
+            const tableSearch = document.getElementById('table-search');
+            const tableItems = document.querySelectorAll('.table-item');
+            
+            tableSearch.addEventListener('input', function() {
+                const searchValue = this.value.toLowerCase().trim();
+                
+                tableItems.forEach(item => {
+                    const tableName = item.getAttribute('data-name');
+                    
+                    if (tableName.includes(searchValue)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Menu search functionality
+            const menuSearch = document.getElementById('menu-search');
+            
+            menuSearch.addEventListener('input', function() {
+                const searchValue = this.value.toLowerCase().trim();
+                const allMenuItems = document.querySelectorAll('.tab-pane .bg-white.rounded-lg');
+                
+                if (searchValue === '') {
+                    // Reset to default tab view
+                    document.querySelectorAll('.tab-pane').forEach(pane => {
+                        if (pane.getAttribute('aria-labelledby') === 'salades-marocaines-tab') {
+                            pane.classList.remove('hidden');
+                            pane.classList.add('block');
+                        } else {
+                            pane.classList.add('hidden');
+                            pane.classList.remove('block');
+                        }
+                    });
+                    return;
+                }
+                
+                // Show all tabs when searching
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.remove('hidden');
+                    pane.classList.add('block');
+                });
+                
+                // Filter menu items
+                allMenuItems.forEach(item => {
+                    const menuTitle = item.querySelector('h5').textContent.toLowerCase();
+                    
+                    if (menuTitle.includes(searchValue)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
