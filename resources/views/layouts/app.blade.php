@@ -40,7 +40,7 @@
                             </a>
                             @auth
                                 <a href="{{ route('dashboard') }}" class="border-transparent text-gray-600 hover:text-orange-600 hover:border-orange-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                                    <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
+                                    Dashboard
                                 </a>
                             @endauth
                         </div>
