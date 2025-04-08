@@ -142,9 +142,44 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'title' => [
+            'required' => 'Le champ titre est obligatoire',
+            'unique' => 'Le titre existe déjà',
         ],
+        'description' => [
+            'required' => 'Le champ description est obligatoire',
+        ],
+        'price' => [
+            'required' => 'Le champ prix est obligatoire',
+        ],
+        'image' => [
+            'required' => 'Le champ image est obligatoire',
+            'image' => 'Veuillez choisir une image valide',
+            'mimes' => 'Seuls les fichiers : :values sont accéptés',
+            'uploaded' => 'la taille du fichier :attribute ne doit pas dépasser 2mg',
+        ],
+        'category_id' => [
+            'required' => 'Le champ catégorie est obligatoire',
+        ],
+
+        'name' => [
+            'required' => 'Le champ nom est obligatoire',
+            'unique' => 'Le nom existe déjà',
+        ],
+        'status' => [
+            'required' => 'Le champ disponibilité est obligatoire',
+        ],
+        
+        'menu_id' => [
+            'required' => 'Le champ menu est obligatoire',
+        ],
+        'table_id' => [
+            'required' => 'Le champ table est obligatoire',
+        ],
+        'change' => [
+            'required' => 'Le champ reste est obligatoire',
+        ],
+   
     ],
 
     /*

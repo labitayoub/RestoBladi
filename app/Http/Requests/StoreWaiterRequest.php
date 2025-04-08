@@ -24,7 +24,9 @@ class StoreWaiterRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            // "user_id" => "required|exists:users,id",
+            // "phone_number" => "required|unique:waiters,phone_number",
+            // "status" => "required|boolean"
         ];
     }
 }

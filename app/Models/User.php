@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id', // Add role_id to fillable attributes
     ];
 
     /**
@@ -41,4 +42,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function waiter()
+    {
+        return $this->hasOne(Waiter::class);
+    }
+    public function manager()
+    {
+        return $this->hasOne(Manager::class);
+    }
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }
