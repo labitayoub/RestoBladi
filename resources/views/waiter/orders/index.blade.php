@@ -73,6 +73,7 @@
                                 <div class="p-4">
                                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                         @foreach ($tables as $table)
+                                            @if(!$table->status)
                                             <div class="bg-white rounded-lg shadow border hover:border-orange-300 p-4 transition duration-200 hover:shadow-md table-item" data-name="{{ strtolower($table->name) }}">
                                                 <div class="flex justify-between items-center mb-2">
                                                     <span class="font-semibold text-lg text-gray-700">{{ $table->name }}</span>
@@ -151,6 +152,7 @@
                                                     @endforeach
                                                 </div>
                                             </div>
+                                            @endif
                                         @endforeach
                                     </div>
                                 </div>
