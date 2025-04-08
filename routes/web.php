@@ -11,6 +11,7 @@ use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\Table;
 use App\Models\Waiter;
@@ -27,6 +28,8 @@ use Carbon\Carbon;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Route temporaire de débogage
 
 Route::get('/', function () {
     return view('welcome');
@@ -82,3 +85,4 @@ Route::middleware(['auth', 'role:waiter'])->prefix('waiter')->group(function() {
 Route::fallback(function () {
     return view('errors.404');
 });
+
