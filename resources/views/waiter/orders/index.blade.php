@@ -8,7 +8,7 @@
                     <!-- Header Section - Modernized -->
                     <div class="flex flex-col md:flex-row justify-between items-center border-b border-gray-200 pb-4 mb-6">
                         <div class="flex items-center mb-4 md:mb-0">
-                            <a href="/home" class="text-gray-500 hover:text-gray-700 mr-4 transition duration-150">
+                            <a href="/dashboard" class="text-gray-500 hover:text-gray-700 mr-4 transition duration-150">
                                 <i class="fas fa-chevron-left"></i>
                             </a>
                             <h3 class="text-xl font-bold text-gray-800">
