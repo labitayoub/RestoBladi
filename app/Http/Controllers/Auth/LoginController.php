@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Waiter;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,19 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        // First check if the user is a waiter with inactive status
+        $user = User::where('email', $request->email)->first();
+        
+        if ($user && $user->role_id == 3) { // role_id 3 is for waiters
+            $waiter = Waiter::where('user_id', $user->id)->first();
+            
+            if ($waiter && !$waiter->status) {
+                return back()->withErrors([
+                    'email' => 'Votre compte est en attente d\'activation par un manager.',
+                ]);
+            }
+        }
 
         if (Auth::attempt($request->only('email', 'password'))) {
             $request->session()->regenerate();
