@@ -341,27 +341,6 @@
                             </div>
                             <h5 class="font-medium text-gray-700 group-hover:text-orange-600 transition-colors duration-200">Nouvelle commande</h5>
                         </a>
-                        
-                        <a href="{{ route('orders.index') }}#menus" class="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:border-orange-300 transition-all duration-200 hover:shadow-lg group">
-                            <div class="p-3 rounded-full bg-amber-100 text-amber-600 mb-3 group-hover:bg-amber-200 transition-colors duration-200">
-                                <i class="fas fa-utensils text-2xl"></i>
-                            </div>
-                            <h5 class="font-medium text-gray-700 group-hover:text-amber-600 transition-colors duration-200">Consulter menus</h5>
-                        </a>
-                        
-                        <a href="{{ route('tables.index') }}" class="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:border-orange-300 transition-all duration-200 hover:shadow-lg group">
-                            <div class="p-3 rounded-full bg-blue-100 text-blue-600 mb-3 group-hover:bg-blue-200 transition-colors duration-200">
-                                <i class="fas fa-chair text-2xl"></i>
-                            </div>
-                            <h5 class="font-medium text-gray-700 group-hover:text-blue-600 transition-colors duration-200">Gérer tables</h5>
-                        </a>
-                        
-                        <a href="{{ route('sales.index') }}" class="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:border-orange-300 transition-all duration-200 hover:shadow-lg group">
-                            <div class="p-3 rounded-full bg-green-100 text-green-600 mb-3 group-hover:bg-green-200 transition-colors duration-200">
-                                <i class="fas fa-receipt text-2xl"></i>
-                            </div>
-                            <h5 class="font-medium text-gray-700 group-hover:text-green-600 transition-colors duration-200">Historique ventes</h5>
-                        </a>
                     </div>
                 </div>
                 
