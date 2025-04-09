@@ -150,17 +150,10 @@
             
             <!-- Action Buttons -->
             <div class="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200">
-                <a href="{{ route('sales.index') }}" class="flex items-center bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md text-sm font-medium transition duration-150 ease-in-out">
+                <a href="{{ route('dashboard') }}" class="flex items-center bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md text-sm font-medium transition duration-150 ease-in-out">
                     <i class="fas fa-arrow-left mr-2"></i> Retour
                 </a>
-                
-                <button type="button" onclick="printReceipt({{ $sale->id }})" class="flex items-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-sm font-medium transition duration-150 ease-in-out">
-                    <i class="fas fa-print mr-2"></i> Imprimer reçu
-                </button>
-                
-                <a href="{{ route('sales.edit', $sale->id) }}" class="flex items-center bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-md text-sm font-medium transition duration-150 ease-in-out">
-                    <i class="fas fa-edit mr-2"></i> Modifier
-                </a>
+
             </div>
         </div>
     </div>
