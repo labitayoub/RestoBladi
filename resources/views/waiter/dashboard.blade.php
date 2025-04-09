@@ -325,22 +325,6 @@
                     </div>
                 </div>
                 
-                <!-- Quick Access Section -->
-                <div class="mb-8">
-                    <h4 class="text-lg font-bold text-gray-800 mb-4">
-                        <i class="fas fa-bolt text-orange-500 mr-2"></i>Accès rapide
-                    </h4>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        <a href="{{ route('orders.index') }}" class="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:border-orange-300 transition-all duration-200 hover:shadow-lg group">
-                            <div class="p-3 rounded-full bg-orange-100 text-orange-600 mb-3 group-hover:bg-orange-200 transition-colors duration-200">
-                                <i class="fas fa-plus-circle text-2xl"></i>
-                            </div>
-                            <h5 class="font-medium text-gray-700 group-hover:text-orange-600 transition-colors duration-200">Nouvelle commande</h5>
-                        </a>
-                    </div>
-                </div>
-                
                 <!-- Restaurant Info Section (Nouvelle section) -->
                 <div class="mb-8">
                     <h4 class="text-lg font-bold text-gray-800 mb-4">
