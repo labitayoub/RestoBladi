@@ -94,7 +94,7 @@ Route::middleware(['auth'])->group(function() {
     Route::resource('sales', SaleController::class);
     Route::get('sales/{sale}/receipt', [SaleController::class, 'receipt'])->name('sales.receipt');
 });
-// Common routes for authenticated users
+
 
 Route::fallback(function () {
     return view('errors.404');

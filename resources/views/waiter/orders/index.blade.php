@@ -68,12 +68,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div>
+                                <a href="#" class="flex items-center bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm font-medium transition duration-150 ease-in-out" onclick="refreshPage()">
+                                    <i class="fas fa-sync-alt mr-2"></i> Actualiser
+                                </a>
+                            </div>
                             
                             <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                                 <div class="p-4">
                                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                         @foreach ($tables as $table)
-                                            @if(!$table->status)
+                                            @if($table->status==1)
                                             <div class="bg-white rounded-lg shadow border hover:border-orange-300 p-4 transition duration-200 hover:shadow-md table-item" data-name="{{ strtolower($table->name) }}">
                                                 <div class="flex justify-between items-center mb-2">
                                                     <span class="font-semibold text-lg text-gray-700">{{ $table->name }}</span>

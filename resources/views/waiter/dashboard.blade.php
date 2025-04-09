@@ -31,7 +31,15 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-blue-600">Mes commandes (aujourd'hui)</p>
-                                <p class="text-2xl font-bold text-gray-800">{{ \App\Models\Sale::where('waiter_id', Auth::id())->whereDate('created_at', today())->count() ?? 0 }}</p>
+                                <p class="text-2xl font-bold text-gray-800">
+                                    @php
+                                        $waiterId = App\Models\Waiter::where('user_id', Auth::id())->first()->id ?? 0;
+                                        $todayOrders = \App\Models\Sale::where('waiter_id', $waiterId)
+                                            ->whereDate('created_at', today())
+                                            ->count() ?? 0;
+                                        echo $todayOrders;
+                                    @endphp
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -43,7 +51,14 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-green-600">Mes ventes (DH)</p>
-                                <p class="text-2xl font-bold text-gray-800">{{ \App\Models\Sale::where('waiter_id', Auth::id())->whereDate('created_at', today())->sum('total_ttc') ?? 0 }} DH</p>
+                                <p class="text-2xl font-bold text-gray-800">
+                                    @php
+                                        $todaySales = \App\Models\Sale::where('waiter_id', $waiterId)
+                                            ->whereDate('created_at', today())
+                                            ->sum('total_ttc') ?? 0;
+                                        echo $todaySales;
+                                    @endphp
+                                 DH</p>
                             </div>
                         </div>
                     </div>
@@ -57,7 +72,7 @@
                                 <p class="text-sm font-medium text-purple-600">Menus servis</p>
                                 <p class="text-2xl font-bold text-gray-800">
                                     @php
-                                        $menuCount = \App\Models\Sale::where('waiter_id', Auth::id())
+                                        $menuCount = \App\Models\Sale::where('waiter_id', $waiterId)
                                             ->whereDate('created_at', today())
                                             ->with('menus')
                                             ->get()
@@ -80,7 +95,7 @@
                                 <p class="text-sm font-medium text-amber-600">Tables servies</p>
                                 <p class="text-2xl font-bold text-gray-800">
                                     @php
-                                        $tableCount = \App\Models\Sale::where('waiter_id', Auth::id())
+                                        $tableCount = \App\Models\Sale::where('waiter_id', $waiterId)
                                             ->whereDate('created_at', today())
                                             ->with('tables')
                                             ->get()
@@ -130,9 +145,9 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @php
-                                        $recentSales = \App\Models\Sale::where('waiter_id', Auth::id())
+                                        $recentSales = \App\Models\Sale::where('waiter_id', $waiterId)
                                             ->where('created_at', '>=', now()->subDay())
-                                            ->with(['menus', 'table'])
+                                            ->with(['menus', 'tables'])
                                             ->orderBy('created_at', 'desc')
                                             ->take(10)
                                             ->get();
@@ -145,7 +160,12 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
-                                                    <i class="fas fa-chair mr-1"></i>{{ $sale->table->name ?? 'N/A' }}
+                                                    <i class="fas fa-chair mr-1"></i>
+                                                    @if($sale->tables && $sale->tables->count() > 0)
+                                                        {{ $sale->tables->first()->name ?? 'N/A' }}
+                                                    @else
+                                                        N/A
+                                                    @endif
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-500">
@@ -213,7 +233,7 @@
                         </h5>
                         <div class="space-y-3">
                             @php
-                                $topMenus = \App\Models\Sale::where('waiter_id', Auth::id())
+                                $topMenus = \App\Models\Sale::where('waiter_id', $waiterId)
                                     ->whereDate('created_at', '>=', now()->subDays(7))
                                     ->with('menus')
                                     ->get()
@@ -228,6 +248,8 @@
                                     })
                                     ->sortByDesc('count')
                                     ->take(5);
+                                
+                                $maxCount = $topMenus->isEmpty() ? 1 : max($topMenus->max('count'), 1);
                             @endphp
                             
                             @forelse($topMenus as $menu)
@@ -236,7 +258,7 @@
                                     <span class="font-semibold">{{ $menu['count'] }}</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                    <div class="bg-orange-500 h-2.5 rounded-full" style="width: {{ min($menu['count'] / max($topMenus->max('count'), 1) * 100, 100) }}%"></div>
+                                    <div class="bg-orange-500 h-2.5 rounded-full" style="width: {{ min($menu['count'] / $maxCount * 100, 100) }}%"></div>
                                 </div>
                             @empty
                                 <div class="flex flex-col items-center justify-center py-6 text-gray-500">
@@ -248,7 +270,64 @@
                     </div>
                     
                     <!-- Weekly Performance -->
-                   
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h5 class="text-md font-semibold text-gray-700 mb-4 flex items-center">
+                            <i class="fas fa-chart-line text-blue-400 mr-2"></i>Performance hebdomadaire
+                        </h5>
+                        <div class="space-y-4">
+                            @php
+                                $startDate = now()->subDays(6)->startOfDay();
+                                $endDate = now()->endOfDay();
+                                
+                                $dailyStats = [];
+                                $currentDate = clone $startDate;
+                                
+                                while ($currentDate <= $endDate) {
+                                    $day = $currentDate->format('Y-m-d');
+                                    $dayFormatted = $currentDate->format('D');
+                                    $salesCount = \App\Models\Sale::where('waiter_id', $waiterId)
+                                        ->whereDate('created_at', $day)
+                                        ->count();
+                                    $totalSales = \App\Models\Sale::where('waiter_id', $waiterId)
+                                        ->whereDate('created_at', $day)
+                                        ->sum('total_ttc');
+                                    
+                                    $dailyStats[] = [
+                                        'day' => $dayFormatted,
+                                        'date' => $currentDate->format('d/m'),
+                                        'count' => $salesCount,
+                                        'total' => $totalSales
+                                    ];
+                                    
+                                    $currentDate->addDay();
+                                }
+                                
+                                $maxSales = collect($dailyStats)->max('total') ?: 1;
+                            @endphp
+                            
+                            @foreach($dailyStats as $stat)
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-xs font-medium text-gray-500">{{ $stat['day'] }} ({{ $stat['date'] }})</span>
+                                        <span class="text-xs font-medium">{{ $stat['count'] }} ventes - {{ $stat['total'] }} DH</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: {{ ($stat['total'] / $maxSales) * 100 }}%"></div>
+                                    </div>
+                                </div>
+                            @endforeach
+                            
+                            <div class="flex justify-between items-center mt-2 pt-2 border-t border-gray-200">
+                                <span class="text-sm font-medium text-gray-600">Total hebdomadaire</span>
+                                <span class="text-sm font-semibold">
+                                    @php
+                                        $weeklyTotal = collect($dailyStats)->sum('total');
+                                        echo $weeklyTotal . ' DH';
+                                    @endphp
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Quick Access Section -->
@@ -285,6 +364,73 @@
                             </div>
                             <h5 class="font-medium text-gray-700 group-hover:text-green-600 transition-colors duration-200">Historique ventes</h5>
                         </a>
+                    </div>
+                </div>
+                
+                <!-- Restaurant Info Section (Nouvelle section) -->
+                <div class="mb-8">
+                    <h4 class="text-lg font-bold text-gray-800 mb-4">
+                        <i class="fas fa-store text-orange-500 mr-2"></i>Information restaurant
+                    </h4>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        @php
+                            // Récupérer le restaurant à partir du serveur connecté
+                            $waiter = App\Models\Waiter::where('user_id', Auth::id())->first();
+                            $restaurant = null;
+                            
+                            if ($waiter) {
+                                $manager = \App\Models\Manager::find($waiter->manager_id);
+                                
+                                if ($manager) {
+                                    $restaurant = \App\Models\Restaurant::find($manager->restaurant_id);
+                                }
+                            }
+                        @endphp
+                        
+                        @if($restaurant)
+                            <div class="flex flex-col md:flex-row items-start gap-6">
+                                <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg border-l-4 border-orange-500 flex-1">
+                                    <h5 class="text-md font-semibold text-gray-700 mb-2 flex items-center">
+                                        <i class="fas fa-info-circle text-orange-500 mr-2"></i>À propos
+                                    </h5>
+                                    <div class="space-y-2">
+                                        <p class="text-sm text-gray-600">
+                                            <span class="font-medium">Nom:</span> {{ $restaurant->name }}
+                                        </p>
+                                        <p class="text-sm text-gray-600">
+                                            <span class="font-medium">Adresse:</span> {{ $restaurant->address }}
+                                        </p>
+                                        <p class="text-sm text-gray-600">
+                                            <span class="font-medium">Téléphone:</span> {{ $restaurant->phone_number }}
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border-l-4 border-blue-500 flex-1">
+                                    <h5 class="text-md font-semibold text-gray-700 mb-2 flex items-center">
+                                        <i class="fas fa-user-shield text-blue-500 mr-2"></i>Votre manager
+                                    </h5>
+                                    <div class="space-y-2">
+                                        @if($manager && $manager->user)
+                                            <p class="text-sm text-gray-600">
+                                                <span class="font-medium">Nom:</span> {{ $manager->user->name }}
+                                            </p>
+                                            <p class="text-sm text-gray-600">
+                                                <span class="font-medium">Email:</span> {{ $manager->user->email }}
+                                            </p>
+                                        @else
+                                            <p class="text-sm text-gray-500">Information non disponible</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="flex flex-col items-center justify-center py-6 text-gray-500">
+                                <i class="fas fa-store-slash text-3xl mb-2 text-gray-300"></i>
+                                <p class="text-gray-500 text-sm">Information du restaurant non disponible</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
