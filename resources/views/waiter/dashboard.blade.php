@@ -265,7 +265,7 @@
                             <h5 class="font-medium text-gray-700 group-hover:text-orange-600 transition-colors duration-200">Nouvelle commande</h5>
                         </a>
                         
-                        <a href="{{ route('menus.index') }}" class="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:border-orange-300 transition-all duration-200 hover:shadow-lg group">
+                        <a href="{{ route('orders.index') }}#menus" class="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:border-orange-300 transition-all duration-200 hover:shadow-lg group">
                             <div class="p-3 rounded-full bg-amber-100 text-amber-600 mb-3 group-hover:bg-amber-200 transition-colors duration-200">
                                 <i class="fas fa-utensils text-2xl"></i>
                             </div>

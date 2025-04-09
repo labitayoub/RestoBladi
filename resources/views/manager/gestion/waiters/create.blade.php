@@ -1,3 +1,4 @@
+<!-- Modification de create.blade.php -->
 @extends('layouts.app')
 
 @section("content")
@@ -97,6 +98,14 @@
                                 @error('status')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
+                            </div>
+                            
+                            <!-- Affichage du manager actuel (optionnel) -->
+                            <div class="mb-6 bg-gray-50 p-3 rounded-lg">
+                                <p class="text-sm text-gray-600">
+                                    <i class="fas fa-info-circle text-blue-500 mr-1"></i>
+                                    Ce serveur sera assigné automatiquement au manager : <strong>{{ Auth::user()->name }}</strong>
+                                </p>
                             </div>
                             
                             <div class="flex items-center">

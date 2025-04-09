@@ -92,62 +92,99 @@
                                                 <div>
                                                     @foreach ($table->sales as $sale)
                                                         @if ($sale->created_at >= Carbon\Carbon::today())
-                                                            <div class="mt-3 p-3 border border-pink-200 rounded-lg bg-pink-50" id="{{ $sale->id }}">
-                                                                <div class="bg-white rounded-lg shadow-sm p-3">
-                                                                    <div class="flex flex-col items-center">
-                                                                        @foreach ($sale->menus()->where("sales_id", $sale->id)->get() as $menu)
-                                                                            <h5 class="font-semibold text-gray-800">
-                                                                                {{ $menu->title }}
-                                                                            </h5>
-                                                                            <span class="text-gray-600 text-sm">
-                                                                                {{ $menu->price }} DH
-                                                                            </span>
-                                                                        @endforeach
-                                                                        
-                                                                        <div class="mt-2 bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                                                                            Serveur : {{ $sale->waiter->name }}
-                                                                        </div>
-                                                                        
-                                                                        <div class="grid grid-cols-2 gap-2 mt-2 text-center w-full">
-                                                                            <div class="bg-gray-100 px-2 py-1 rounded text-xs">
-                                                                                Qté : {{ $sale->quantity }}
-                                                                            </div>
-                                                                            <div class="bg-gray-100 px-2 py-1 rounded text-xs">
-                                                                                Prix : {{ $sale->total_ht }} DH
-                                                                            </div>
-                                                                            <div class="bg-gray-100 px-2 py-1 rounded text-xs">
-                                                                                TVA : {{ $sale->tva }} DH
-                                                                            </div>
-                                                                            <div class="bg-gray-100 px-2 py-1 rounded text-xs">
-                                                                                Total : {{ $sale->total_ttc }} DH
-                                                                            </div>
-                                                                        </div>
-                                                                        
-                                                                        <div class="grid grid-cols-2 gap-2 mt-2 text-center w-full">
-                                                                            <div class="bg-gray-100 px-2 py-1 rounded text-xs">
-                                                                                Type : {{ $sale->payment_type === "cash" ? "Espèce" : "Carte bancaire" }}
-                                                                            </div>
-                                                                        </div>
-                                                                        
-                                                                        <hr class="my-2 w-full border-gray-200">
-                                                                        
-                                                                        <div class="text-center text-xs text-gray-600">
-                                                                            <div class="font-semibold">Restaurant XXXXX</div>
-                                                                            <div>Rue afrah taza</div>
-                                                                            <div>0123456789</div>
-                                                                        </div>
+                                                        <div class="mt-3" id="{{ $sale->id }}">
+                                                            <div class="bg-white border-2 border-dashed border-pink-200 rounded-lg p-5 mx-auto max-w-xs text-center text-gray-700 transform transition hover:scale-105 duration-200">
+                                                                <!-- En-tête avec nom du produit -->
+                                                                <div class="mb-2">
+                                                                    @foreach ($sale->menus as $menu)
+                                                                        <h5 class="font-semibold text-gray-800 text-xl">
+                                                                            {{ $menu->title }}
+                                                                        </h5>
+                                                                        <p class="text-gray-600 mb-3">
+                                                                            {{ $menu->price }} DH
+                                                                        </p>
+                                                                    @endforeach
+                                                                </div>
+                                                                
+                                                                <!-- Section serveur -->
+                                                                <div class="mb-3">
+                                                                    <span class="bg-red-500 text-white text-xs font-medium px-3 py-1 rounded">
+                                                                        Serveur : {{ $sale->waiter->user->name }}
+                                                                    </span>
+                                                                </div>
+                                                                
+                                                                <!-- Détails de la commande -->
+                                                                <div class="space-y-2 mb-4 text-sm">
+                                                                    <div class="flex justify-between text-black">
+                                                                        <span class="font-medium">Qté :</span>
+                                                                        <span class="font-medium">{{ count($sale->menus) }}</span>
+                                                                    </div>
+                                                                    
+                                                                    <div class="flex justify-between text-black">
+                                                                        <span class="font-medium">Prix HT :</span>
+                                                                        <span class="font-medium">{{ $sale->total_ht }} DH</span>
+                                                                    </div>
+                                                                    
+                                                                    <div class="flex justify-between text-black">
+                                                                        <span class="font-medium">TVA :</span>
+                                                                        <span class="font-medium">{{ $sale->tva }} DH</span>
+                                                                    </div>
+                                                                    
+                                                                    <div class="flex justify-between font-semibold text-black">
+                                                                        <span>Total TTC :</span>
+                                                                        <span>{{ $sale->total_ttc }} DH</span>
                                                                     </div>
                                                                 </div>
                                                                 
-                                                                <div class="flex justify-center mt-2 space-x-2">
-                                                                    <a href="{{ route('sales.edit', $sale->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-2 rounded-md text-xs transition duration-150 ease-in-out">
+                                                                <!-- Informations de paiement -->
+                                                                <div class="space-y-2 mb-4 text-sm">
+                                                                    <div class="flex justify-between text-black">
+                                                                        <span class="font-medium">Type de paiement :</span>
+                                                                        <span class="font-medium">{{ $sale->payment_type === "cash" ? "Espèce" : "TPE" }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <!-- Pied de page - Information du restaurant dynamique -->
+                                                                <div class="pt-3 border-t border-gray-200 text-sm text-gray-600">
+                                                                    @php
+                                                                        // Récupérer le restaurant via la relation serveur -> manager -> restaurant
+                                                                        $restaurant = null;
+                                                                        $waiter = $sale->waiter;
+                                                                        
+                                                                        if ($waiter) {
+                                                                            // Récupérer le manager à partir de l'ID manager dans la table des serveurs
+                                                                            $manager = \App\Models\Manager::find($waiter->manager_id);
+                                                                            
+                                                                            if ($manager) {
+                                                                                // Récupérer le restaurant lié à ce manager
+                                                                                $restaurant = \App\Models\Restaurant::find($manager->restaurant_id);
+                                                                            }
+                                                                        }
+                                                                    @endphp
+                                                                    
+                                                                    <!-- Message de remerciement au client -->
+                                                                    <div class="mb-2 font-medium italic">
+                                                                        Merci pour votre visite. Au plaisir de vous revoir très bientôt!
+                                                                    </div>
+                                                                    
+                                                                    <div class="font-semibold">
+                                                                        Restaurant {{ $restaurant ? $restaurant->name : '' }}
+                                                                    </div>
+                                                                    <div>{{ $restaurant ? $restaurant->address : '' }}</div>
+                                                                    <div>{{ $restaurant ? $restaurant->phone_number : '' }}</div>
+                                                                </div>
+                                                                
+                                                                <!-- Boutons d'action -->
+                                                                <div class="flex justify-center mt-4 space-x-3">
+                                                                    <a href="{{ route('sales.edit', $sale->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white py-1.5 px-3 rounded-md text-xs transition duration-150 ease-in-out">
                                                                         <i class="fas fa-edit"></i>
                                                                     </a>
-                                                                    <button type="button" onclick="printReceipt({{ $sale->id }})" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded-md text-xs transition duration-150 ease-in-out">
+                                                                    <button type="button" onclick="printReceipt({{ $sale->id }})" class="bg-blue-500 hover:bg-blue-600 text-white py-1.5 px-3 rounded-md text-xs transition duration-150 ease-in-out">
                                                                         <i class="fas fa-print"></i>
                                                                     </button>
                                                                 </div>
                                                             </div>
+                                                        </div>
                                                         @endif
                                                     @endforeach
                                                 </div>
@@ -334,7 +371,7 @@
                                                         readonly
                                                     >
                                                 </div>
-                                                <input type="hidden" name="waiter_id" value="{{ Auth::id() }}">
+                                                <input type="hidden" name="waiter_id" value="{{ App\Models\Waiter::where('user_id', Auth::id())->first()->id ?? '' }}">
                                             </div>
                                         </div>
                                         
@@ -422,38 +459,18 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Constants
-            const TVA_RATE = 0.20; // 20% VAT rate
-            
-            // Element selectors
-            const tabs = document.querySelectorAll('[data-toggle="pill"]');
-            const menuCheckboxes = document.querySelectorAll('.menu-checkbox');
-            const totalHtInput = document.getElementById('total_ht');
-            const tvaInput = document.getElementById('tva');
-            const totalTtcInput = document.getElementById('total_ttc');
-            const tableSearch = document.getElementById('table-search');
-            const tableItems = document.querySelectorAll('.table-item');
-            const menuSearch = document.getElementById('menu-search');
-            
-            // Print receipt function
-            window.printReceipt = function(id) {
-                const printContents = document.getElementById(id).innerHTML;
-                const originalContents = document.body.innerHTML;
-                
-                document.body.innerHTML = printContents;
-                window.print();
-                document.body.innerHTML = originalContents;
-                
-                // Reload page after printing
-                setTimeout(function() {
-                    window.location.reload();
-                }, 1000);
-            };
-            
-            // Tab functionality
-            tabs.forEach(tab => {
+            // Tab navigation for menu categories
+            const tabLinks = document.querySelectorAll('[data-toggle="pill"]');
+            tabLinks.forEach(tab => {
                 tab.addEventListener('click', function(e) {
                     e.preventDefault();
+                    
+                    // Remove active classes
+                    document.querySelectorAll('[data-toggle="pill"]').forEach(t => {
+                        t.classList.remove('border-orange-500', 'text-orange-600');
+                        t.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                        t.setAttribute('aria-selected', 'false');
+                    });
                     
                     // Hide all tab panes
                     document.querySelectorAll('.tab-pane').forEach(pane => {
@@ -461,102 +478,44 @@
                         pane.classList.remove('block');
                     });
                     
-                    // Remove active class from all tabs
-                    tabs.forEach(t => {
-                        t.classList.remove('border-orange-500', 'text-orange-600');
-                        t.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
-                        t.setAttribute('aria-selected', 'false');
-                    });
-                    
-                    // Add active class to current tab
-                    this.classList.add('border-orange-500', 'text-orange-600');
+                    // Activate clicked tab
                     this.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    this.classList.add('border-orange-500', 'text-orange-600');
                     this.setAttribute('aria-selected', 'true');
                     
-                    // Show current tab pane
-                    const target = this.getAttribute('href').substring(1);
-                    document.getElementById(target).classList.remove('hidden');
-                    document.getElementById(target).classList.add('block');
+                    // Show corresponding content
+                    const tabID = this.getAttribute('href').substring(1);
+                    const tabContent = document.getElementById(tabID);
+                    tabContent.classList.remove('hidden');
+                    tabContent.classList.add('block');
                 });
-            });
-            
-            // Calculate totals function
-            function calculateTotals() {
-                let totalHt = 0;
-                
-                // Get all selected menus
-                const selectedMenus = document.querySelectorAll('.menu-checkbox:checked');
-                
-                // Calculate total HT (excluding tax)
-                selectedMenus.forEach(checkbox => {
-                    const menuItem = checkbox.closest('.menu-item');
-                    const priceText = menuItem.querySelector('.menu-price').innerText;
-                    const price = parseFloat(priceText.replace('DH', '').trim());
-                    totalHt += isNaN(price) ? 0 : price;
-                });
-                
-                // Calculate TVA (tax amount)
-                const tva = totalHt * TVA_RATE;
-                
-                // Calculate total TTC (including tax)
-                const totalTtc = totalHt + tva;
-                
-                // Update input fields with formatted values
-                totalHtInput.value = totalHt.toFixed(2);
-                tvaInput.value = tva.toFixed(2);
-                totalTtcInput.value = totalTtc.toFixed(2);
-            }
-            
-            // Add event listeners to all menu checkboxes
-            menuCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', calculateTotals);
             });
             
             // Table search functionality
+            const tableSearch = document.getElementById('table-search');
             tableSearch.addEventListener('input', function() {
-                const searchValue = this.value.toLowerCase().trim();
+                const searchTerm = this.value.toLowerCase().trim();
+                const tables = document.querySelectorAll('.table-item');
                 
-                tableItems.forEach(item => {
-                    const tableName = item.getAttribute('data-name');
-                    
-                    if (tableName.includes(searchValue)) {
-                        item.style.display = '';
+                tables.forEach(table => {
+                    const tableName = table.dataset.name;
+                    if (tableName.includes(searchTerm)) {
+                        table.style.display = '';
                     } else {
-                        item.style.display = 'none';
+                        table.style.display = 'none';
                     }
                 });
             });
             
             // Menu search functionality
+            const menuSearch = document.getElementById('menu-search');
             menuSearch.addEventListener('input', function() {
-                const searchValue = this.value.toLowerCase().trim();
-                const allMenuItems = document.querySelectorAll('.menu-item');
+                const searchTerm = this.value.toLowerCase().trim();
+                const menuItems = document.querySelectorAll('.menu-item');
                 
-                if (searchValue === '') {
-                    // Reset to default tab view
-                    document.querySelectorAll('.tab-pane').forEach(pane => {
-                        if (pane.getAttribute('aria-labelledby') === 'Le dîner-tab') {
-                            pane.classList.remove('hidden');
-                            pane.classList.add('block');
-                        } else {
-                            pane.classList.add('hidden');
-                            pane.classList.remove('block');
-                        }
-                    });
-                    return;
-                }
-                
-                // Show all tabs when searching
-                document.querySelectorAll('.tab-pane').forEach(pane => {
-                    pane.classList.remove('hidden');
-                    pane.classList.add('block');
-                });
-                
-                // Filter menu items
-                allMenuItems.forEach(item => {
+                menuItems.forEach(item => {
                     const menuTitle = item.querySelector('.menu-title').textContent.toLowerCase();
-                    
-                    if (menuTitle.includes(searchValue)) {
+                    if (menuTitle.includes(searchTerm)) {
                         item.style.display = '';
                     } else {
                         item.style.display = 'none';
@@ -564,8 +523,80 @@
                 });
             });
             
-            // Initialize calculations on page load
-            calculateTotals();
+            // Calculate prices when menus are selected
+            const menuCheckboxes = document.querySelectorAll('.menu-checkbox');
+            menuCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', calculateTotal);
+            });
+            
+            function calculateTotal() {
+                let totalHT = 0;
+                const selectedMenus = document.querySelectorAll('.menu-checkbox:checked');
+                
+                selectedMenus.forEach(menu => {
+                    const menuItem = menu.closest('.menu-item');
+                    const price = parseFloat(menuItem.dataset.price);
+                    totalHT += price;
+                });
+                
+                // Calculate TVA (20%)
+                const tva = totalHT * 0.2;
+                const totalTTC = totalHT + tva;
+                
+                // Update form fields
+                document.getElementById('total_ht').value = totalHT.toFixed(2);
+                document.getElementById('tva').value = tva.toFixed(2);
+                document.getElementById('total_ttc').value = totalTTC.toFixed(2);
+            }
+            
+            // Print receipt function
+            window.printReceipt = function(saleId) {
+                const receiptContent = document.getElementById(saleId).cloneNode(true);
+                
+                // Create a new window for printing
+                const printWindow = window.open('', '_blank', 'height=600,width=800');
+                printWindow.document.write('<html><head><title>Reçu de commande</title>');
+                
+                // Add styles
+                printWindow.document.write(`
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+                        .receipt { max-width: 300px; margin: 0 auto; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .items { margin-bottom: 15px; }
+                        .item { display: flex; justify-content: space-between; margin-bottom: 5px; }
+                        .totals { margin-top: 10px; border-top: 1px dashed #000; padding-top: 10px; }
+                        .total-line { display: flex; justify-content: space-between; margin-bottom: 5px; }
+                        .restaurant-info { text-align: center; margin-top: 20px; font-size: 12px; }
+                        .no-print { display: none; }
+                        @media print {
+                            body { padding: 0; margin: 0; }
+                            .receipt { max-width: 100%; }
+                        }
+                    </style>
+                `);
+                
+                printWindow.document.write('</head><body>');
+                
+                // Remove action buttons
+                const actionButtons = receiptContent.querySelectorAll('.no-print, button, a');
+                actionButtons.forEach(btn => btn.remove());
+                
+                printWindow.document.write('<div class="receipt">');
+                printWindow.document.write('<div class="header"><h2>REÇU DE COMMANDE</h2></div>');
+                printWindow.document.write(receiptContent.innerHTML);
+                printWindow.document.write('</div>');
+                printWindow.document.write('</body></html>');
+                
+                printWindow.document.close();
+                printWindow.focus();
+                
+                // Print after a short delay to ensure content is loaded
+                setTimeout(() => {
+                    printWindow.print();
+                    printWindow.close();
+                }, 300);
+            }
         });
     </script>
 @endsection

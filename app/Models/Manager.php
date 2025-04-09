@@ -32,4 +32,8 @@ class Manager extends Model
     {
         return $this->belongsTo(Restaurant::class);
     }
+    public function waiters()
+{
+    return $this->hasMany(Waiter::class);
+}
 }

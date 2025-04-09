@@ -13,6 +13,7 @@ class Waiter extends Model
         'user_id',
         'phone_number',
         'status',
+        'manager_id'
     ];
 
     /**
@@ -29,4 +30,12 @@ class Waiter extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function manager()
+{
+    return $this->belongsTo(User::class, 'manager_id');
+}
+public function sales()
+{
+    return $this->hasMany(Sale::class);
+}
 }

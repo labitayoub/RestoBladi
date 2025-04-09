@@ -71,15 +71,29 @@ Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function()
     Route::resource('menus', MenuController::class);
     Route::resource('tables', TableController::class);
     Route::resource('waiters', WaiterController::class);
-    Route::resource('sales', SaleController::class);
 });
+
+// Move the sales route inside a middleware group
+
+
 
 // Waiter routes
 Route::middleware(['auth', 'role:waiter'])->prefix('waiter')->group(function() {
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::resource('sales', SaleController::class);
     // Add more waiter-specific routes here
+    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    // Route::post('sales', [SaleController::class, 'store'])->name('sales.store');
+    Route::get('sales/{sale}', [SaleController::class, 'show'])->name('sales.show');
+    Route::get('sales/{sale}/edit', [SaleController::class, 'edit'])->name('sales.edit');
+    Route::put('sales/{sale}', [SaleController::class, 'update'])->name('sales.update');
+    // Route pour le reçu
+    Route::get('sales/{sale}/receipt', [SaleController::class, 'receipt'])->name('sales.receipt');
 });
-
+Route::middleware(['auth'])->group(function() {
+    Route::resource('sales', SaleController::class);
+    Route::get('sales/{sale}/receipt', [SaleController::class, 'receipt'])->name('sales.receipt');
+});
 // Common routes for authenticated users
 
 Route::fallback(function () {
