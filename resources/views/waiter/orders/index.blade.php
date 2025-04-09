@@ -113,6 +113,13 @@
                                                                     </span>
                                                                 </div>
                                                                 
+                                                                <!-- Date et heure de la commande -->
+                                                                <div class="mb-3 text-xs">
+                                                                    <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full">
+                                                                        <i class="far fa-calendar-alt mr-1"></i>{{ $sale->created_at->format('d/m/Y H:i') }}
+                                                                    </span>
+                                                                </div>
+                                                                
                                                                 <!-- Détails de la commande -->
                                                                 <div class="space-y-2 mb-4 text-sm">
                                                                     <div class="flex justify-between text-black">
