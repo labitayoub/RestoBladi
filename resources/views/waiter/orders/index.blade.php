@@ -191,7 +191,7 @@
                                                                     <a href="{{ route('sales.edit', $sale->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white py-1.5 px-3 rounded-md text-xs transition duration-150 ease-in-out">
                                                                         <i class="fas fa-edit"></i>
                                                                     </a>
-                                                                    <button type="button" onclick="printReceipt({{ $sale->id }})" class="bg-blue-500 hover:bg-blue-600 text-white py-1.5 px-3 rounded-md text-xs transition duration-150 ease-in-out">
+                                                                    <button type="button" onclick="print({{ $sale->id }})" class="bg-blue-500 hover:bg-blue-600 text-white py-1.5 px-3 rounded-md text-xs transition duration-150 ease-in-out">
                                                                         <i class="fas fa-print"></i>
                                                                     </button>
                                                                 </div>
@@ -470,6 +470,15 @@
     </div>
     
     <script>
+
+        function print(el){
+            const page = document.body.innerHTML;
+            const content = document.getElementById(el).innerHTML;
+            document.body.innerHTML = content;
+            window.print();
+            document.body.innerHTML = page;
+        }
+
         function refreshPage() {
             // Ajouter un indicateur de chargement
             const overlay = document.createElement('div');
