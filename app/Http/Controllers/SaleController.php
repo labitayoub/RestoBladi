@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Sale;
 use App\Models\Table;
+use App\Models\Menu;
+use App\Models\Waiter;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
@@ -102,7 +104,16 @@ class SaleController extends Controller
      */
     public function edit(Sale $sale)
     {
-        //
+        // Charger les relations nécessaires
+        $sale->load(['menus', 'tables', 'waiter']);
+        
+        // Récupérer toutes les tables, menus et serveurs pour les listes déroulantes
+        $tables = Table::all();
+        $menus = Menu::all();
+        $waiters = Waiter::with('user')->get();
+        
+        // Retourner la vue avec les données
+        return view('waiter.sales.edit', compact('sale', 'tables', 'menus', 'waiters'));
     }
 
     /**
@@ -114,7 +125,36 @@ class SaleController extends Controller
      */
     public function update(Request $request, Sale $sale)
     {
-        //
+        // Valider les données entrantes
+        $request->validate([
+            "table_id" => "required|array",
+            "table_id.*" => "exists:tables,id",
+            "menu_id" => "required|array",
+            "menu_id.*" => "exists:menus,id",
+            "total_ht" => "required|numeric",
+            "tva" => "required|numeric",
+            "total_ttc" => "required|numeric",
+            "payment_type" => "required|in:cash,card",
+            "waiter_id" => "required|exists:waiters,id",
+        ]);
+    
+        // Mettre à jour les données de la vente
+        $sale->total_ht = $request->total_ht;
+        $sale->tva = $request->tva;
+        $sale->total_ttc = $request->total_ttc;
+        $sale->payment_type = $request->payment_type;
+        $sale->waiter_id = $request->waiter_id;
+        $sale->save();
+        
+        // Synchroniser les menus (retirer les anciens et ajouter les nouveaux)
+        $sale->menus()->sync($request->menu_id);
+        
+        // Synchroniser les tables
+        $sale->tables()->sync($request->table_id);
+        
+        return redirect()->route('dashboard')->with([
+            "success" => "La commande #" . $sale->id . " a été mise à jour avec succès"
+        ]);
     }
 
     /**
@@ -128,15 +168,4 @@ class SaleController extends Controller
         //
     }
     
-    /**
-     * Generate receipt for printing
-     * 
-     * @param  \App\Models\Sale  $sale
-     * @return \Illuminate\Http\Response
-     */
-    public function receipt(Sale $sale)
-    {
-        $sale->load(['menus', 'tables', 'waiter']);
-        return view('sales.receipt', compact('sale'));
-    }
 }

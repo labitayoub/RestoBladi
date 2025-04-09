@@ -1,193 +1,233 @@
 @extends('layouts.app')
 
-
 @section("content")
-    <div class="container">
-        <form id="add-sale" action="{{ route("sales.store") }}" method="post">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <form id="edit-sale" action="{{ route('sales.update', $sale->id) }}" method="POST">
             @csrf
-            <div class="row justify-content-center">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                                <a href="/payments" class="btn btn-outline-secondary">
-                                    <i class="fa fa-chevron-left"></i>
-                                </a>
-                            </div>
+            @method('PUT')
+            
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-6">
+                    <!-- Header Section -->
+                    <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6">
+                        <div class="flex items-center">
+                            <a href="{{ route('sales.index') }}" class="text-gray-500 hover:text-gray-700 mr-4 transition duration-150">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            <h3 class="text-xl font-bold text-gray-800">
+                                <i class="fas fa-edit text-orange-500 mr-2"></i>Modification de la commande #{{ $sale->id }}
+                            </h3>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-gray-600 text-sm bg-gray-100 px-3 py-1 rounded-full">
+                                <i class="far fa-clock mr-1"></i>{{ $sale->created_at->format('d/m/Y H:i') }}
+                            </span>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                @foreach ($tables as $table)
-                                    <div class="col-md-3">
-                                        <div class="card p-2 mb-2 d-flex
-                                                    flex-column justify-content-center
-                                                    align-items-center
-                                                    list-group-item-action">
-                                            <div class="align-self-end">
-                                                <input type="checkbox" name="table_id[]"
-                                                    id="table"
-                                                    value="{{ $table->id }}"
-                                                >
-                                            </div>
-                                            <i class="fa fa-chair fa-5x"></i>
-                                            <span class="mt-2 text-muted font-weight-bold">
-                                                {{ $table->name }}
-                                            </span>
-                                            <hr>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center mt-2">
-                <div class="col-md-12 card p-3">
-                    <div class="row">
-                        @foreach($menus as $menu)
-                            <div class="col-md-4 mb-2">
-                                <div class="card h-100">
-                                    <div class="card-body d-flex
-                                    flex-column justify-content-center
-                                    align-items-center">
-                                        <div class="align-self-end">
-                                            <input type="checkbox" name="menu_id[]"
-                                                id="menu_id"
-                                                value="{{ $menu->id }}"
-                                            >
-                                        </div>
-                                        <img
-                                            src="{{ asset("images/menus/". $menu->image) }}" alt="{{ $menu->title}}"
-                                            class="img-fluid rounded-circle"
-                                            width="100"
-                                            height="100"
+
+                    <!-- Tables Selection -->
+                    <div class="mb-8">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4">
+                            <i class="fas fa-chair text-orange-500 mr-2"></i>Tables
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            @foreach ($tables as $table)
+                                <div class="bg-white rounded-lg shadow border p-4 transition duration-200 hover:shadow-lg hover:border-orange-300">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="font-semibold text-lg text-gray-700">{{ $table->name }}</span>
+                                        <input 
+                                            type="checkbox" 
+                                            name="table_id[]" 
+                                            value="{{ $table->id }}" 
+                                            class="h-4 w-4 text-orange-600"
+                                            {{ in_array($table->id, $sale->tables->pluck('id')->toArray()) ? 'checked' : '' }}
                                         >
-                                        <h5 class="font-weight-bold mt-2">
-                                            {{ $menu->title }}
-                                        </h5>
-                                        <h5 class="text-muted">
-                                            {{ $menu->price }} DH
-                                        </h5>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <i class="fas fa-chair text-4xl text-gray-500 mb-2"></i>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mx-auto">
-                            <div class="form-group">
-                                <select name="servant_id" class="form-control">
-                                    <option value="" selected disabled>
-                                        Sérveur
-                                    </option>
-                                    @foreach ($servants as $servant)
-                                        <option value="{{ $servant->id }}">
-                                            {{ $servant->name }}
+
+                    <!-- Menus Selection -->
+                    <div class="mb-8">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4">
+                            <i class="fas fa-utensils text-orange-500 mr-2"></i>Menus
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            @foreach ($menus as $menu)
+                                <div class="bg-white rounded-lg shadow border p-4 transition duration-200 hover:shadow-lg hover:border-orange-300">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <input 
+                                            type="checkbox" 
+                                            name="menu_id[]" 
+                                            value="{{ $menu->id }}" 
+                                            class="h-4 w-4 text-orange-600 menu-checkbox"
+                                            data-price="{{ $menu->price }}"
+                                            {{ in_array($menu->id, $sale->menus->pluck('id')->toArray()) ? 'checked' : '' }}
+                                        >
+                                        <img 
+                                            src="{{ asset('images/menus/' . $menu->image) }}" 
+                                            alt="{{ $menu->title }}" 
+                                            class="w-16 h-16 rounded-full object-cover"
+                                        >
+                                    </div>
+                                    <div class="text-center">
+                                        <h5 class="font-semibold text-gray-800">{{ $menu->title }}</h5>
+                                        <p class="text-orange-600 font-bold">{{ $menu->price }} DH</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Order Details -->
+                    <div class="mb-8">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4">
+                            <i class="fas fa-file-invoice text-orange-500 mr-2"></i>Détails de la commande
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="total_ht" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-calculator mr-1 text-gray-500"></i>Total HT
+                                </label>
+                                <input 
+                                    type="number" 
+                                    name="total_ht" 
+                                    id="total_ht"
+                                    step="0.01"
+                                    value="{{ $sale->total_ht }}"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                                    readonly
+                                >
+                            </div>
+
+                            <div>
+                                <label for="tva" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-percent mr-1 text-gray-500"></i>TVA
+                                </label>
+                                <input 
+                                    type="number" 
+                                    name="tva" 
+                                    id="tva"
+                                    step="0.01"
+                                    value="{{ $sale->tva }}"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                                    readonly
+                                >
+                            </div>
+
+                            <div>
+                                <label for="total_ttc" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-tags mr-1 text-gray-500"></i>Total TTC
+                                </label>
+                                <input 
+                                    type="number" 
+                                    name="total_ttc" 
+                                    id="total_ttc"
+                                    step="0.01"
+                                    value="{{ $sale->total_ttc }}"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                                    readonly
+                                >
+                            </div>
+
+                            <div>
+                                <label for="waiter_id" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-user-tie mr-1 text-gray-500"></i>Serveur
+                                </label>
+                                <select 
+                                    name="waiter_id" 
+                                    id="waiter_id"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                                >
+                                    @foreach ($waiters as $waiter)
+                                        <option 
+                                            value="{{ $waiter->id }}"
+                                            {{ $sale->waiter_id == $waiter->id ? 'selected' : '' }}
+                                        >
+                                            {{ $waiter->user->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        Qté
-                                    </div>
-                                </div>
-                                <input type="number"
-                                    name="quantity"
-                                    class="form-control"
-                                    placeholder="Qté"
+
+                            <div>
+                                <label for="payment_type" class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-credit-card mr-1 text-gray-500"></i>Type de paiement
+                                </label>
+                                <select 
+                                    name="payment_type" 
+                                    id="payment_type"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
                                 >
-                            </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        $
-                                    </div>
-                                </div>
-                                <input type="number"
-                                    name="total_price"
-                                    class="form-control"
-                                    placeholder="Prix"
-                                >
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        .00
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        $
-                                    </div>
-                                </div>
-                                <input type="number"
-                                    name="total_received"
-                                    class="form-control"
-                                    placeholder="Total"
-                                >
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        .00
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        $
-                                    </div>
-                                </div>
-                                <input type="number"
-                                    name="change"
-                                    class="form-control"
-                                    placeholder="Reste"
-                                >
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        .00
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <select name="payment_type" class="form-control">
-                                    <option value="" selected disabled>
-                                        Type de paiement
-                                    </option>
-                                    <option value="cash">
-                                        Espéce
-                                    </option>
-                                    <option value="card">
-                                        Carte bancaire
-                                    </option>
+                                    <option value="cash" {{ $sale->payment_type == 'cash' ? 'selected' : '' }}>Espèce</option>
+                                    <option value="card" {{ $sale->payment_type == 'card' ? 'selected' : '' }}>Carte bancaire</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <select name="payment_status" class="form-control">
-                                    <option value="" selected disabled>
-                                        Etat de paiement
-                                    </option>
-                                    <option value="paid">
-                                        Payé
-                                    </option>
-                                    <option value="unpaid">
-                                        Impayé
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">
-                                    Ajouter
-                                </button>
-                            </div>
+
+                    
                         </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end space-x-4 mt-6">
+                        <a 
+                            href="{{ route('sales.index') }}" 
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md transition duration-150 ease-in-out"
+                        >
+                            Annuler
+                        </a>
+                        <button 
+                            type="submit" 
+                            class="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-md transition duration-150 ease-in-out"
+                        >
+                            Mettre à jour
+                        </button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuCheckboxes = document.querySelectorAll('.menu-checkbox');
+            const totalHTInput = document.getElementById('total_ht');
+            const tvaInput = document.getElementById('tva');
+            const totalTTCInput = document.getElementById('total_ttc');
+
+            // Fixed calculation logic to ensure accurate totals
+            function calculateTotal() {
+                let totalHT = 0;
+                const selectedMenus = document.querySelectorAll('.menu-checkbox:checked');
+
+                selectedMenus.forEach(menu => {
+                    const price = parseFloat(menu.dataset.price);
+                    if (!isNaN(price)) {
+                        totalHT += price;
+                    }
+                });
+
+                // Calculate TVA (20%)
+                const tva = totalHT * 0.2;
+                const totalTTC = totalHT + tva;
+
+                // Update form fields
+                totalHTInput.value = totalHT.toFixed(2);
+                tvaInput.value = tva.toFixed(2);
+                totalTTCInput.value = totalTTC.toFixed(2);
+            }
+
+            // Ensure initial calculation is accurate
+            calculateTotal();
+
+            // Add event listeners to checkboxes
+            menuCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', calculateTotal);
+            });
+        });
+    </script>
 @endsection

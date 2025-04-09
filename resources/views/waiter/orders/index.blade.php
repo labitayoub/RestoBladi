@@ -470,6 +470,32 @@
     </div>
     
     <script>
+        function refreshPage() {
+            // Ajouter un indicateur de chargement
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            overlay.style.zIndex = '9999';
+            
+            const spinner = document.createElement('div');
+            spinner.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x text-orange-500"></i>';
+            overlay.appendChild(spinner);
+            
+            document.body.appendChild(overlay);
+            
+            // Actualiser la page après un court délai
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Tab navigation for menu categories
             const tabLinks = document.querySelectorAll('[data-toggle="pill"]');
@@ -478,137 +504,29 @@
                     e.preventDefault();
                     
                     // Remove active classes
-                    document.querySelectorAll('[data-toggle="pill"]').forEach(t => {
-                        t.classList.remove('border-orange-500', 'text-orange-600');
-                        t.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
-                        t.setAttribute('aria-selected', 'false');
+                    document.querySelectorAll('[data-toggle="pill"]').forEach(link => {
+                        link.classList.remove('border-orange-500', 'text-orange-600');
+                        link.classList.add('border-transparent', 'text-gray-500');
                     });
-                    
+
+                    // Add active classes to the clicked tab
+                    this.classList.add('border-orange-500', 'text-orange-600');
+                    this.classList.remove('border-transparent', 'text-gray-500');
+
                     // Hide all tab panes
                     document.querySelectorAll('.tab-pane').forEach(pane => {
                         pane.classList.add('hidden');
                         pane.classList.remove('block');
                     });
-                    
-                    // Activate clicked tab
-                    this.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
-                    this.classList.add('border-orange-500', 'text-orange-600');
-                    this.setAttribute('aria-selected', 'true');
-                    
-                    // Show corresponding content
-                    const tabID = this.getAttribute('href').substring(1);
-                    const tabContent = document.getElementById(tabID);
-                    tabContent.classList.remove('hidden');
-                    tabContent.classList.add('block');
-                });
-            });
-            
-            // Table search functionality
-            const tableSearch = document.getElementById('table-search');
-            tableSearch.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
-                const tables = document.querySelectorAll('.table-item');
-                
-                tables.forEach(table => {
-                    const tableName = table.dataset.name;
-                    if (tableName.includes(searchTerm)) {
-                        table.style.display = '';
-                    } else {
-                        table.style.display = 'none';
+
+                    // Show the selected tab pane
+                    const targetPane = document.querySelector(this.getAttribute('href'));
+                    if (targetPane) {
+                        targetPane.classList.add('block');
+                        targetPane.classList.remove('hidden');
                     }
                 });
             });
-            
-            // Menu search functionality
-            const menuSearch = document.getElementById('menu-search');
-            menuSearch.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
-                const menuItems = document.querySelectorAll('.menu-item');
-                
-                menuItems.forEach(item => {
-                    const menuTitle = item.querySelector('.menu-title').textContent.toLowerCase();
-                    if (menuTitle.includes(searchTerm)) {
-                        item.style.display = '';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
-            
-            // Calculate prices when menus are selected
-            const menuCheckboxes = document.querySelectorAll('.menu-checkbox');
-            menuCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', calculateTotal);
-            });
-            
-            function calculateTotal() {
-                let totalHT = 0;
-                const selectedMenus = document.querySelectorAll('.menu-checkbox:checked');
-                
-                selectedMenus.forEach(menu => {
-                    const menuItem = menu.closest('.menu-item');
-                    const price = parseFloat(menuItem.dataset.price);
-                    totalHT += price;
-                });
-                
-                // Calculate TVA (20%)
-                const tva = totalHT * 0.2;
-                const totalTTC = totalHT + tva;
-                
-                // Update form fields
-                document.getElementById('total_ht').value = totalHT.toFixed(2);
-                document.getElementById('tva').value = tva.toFixed(2);
-                document.getElementById('total_ttc').value = totalTTC.toFixed(2);
-            }
-            
-            // Print receipt function
-            window.printReceipt = function(saleId) {
-                const receiptContent = document.getElementById(saleId).cloneNode(true);
-                
-                // Create a new window for printing
-                const printWindow = window.open('', '_blank', 'height=600,width=800');
-                printWindow.document.write('<html><head><title>Reçu de commande</title>');
-                
-                // Add styles
-                printWindow.document.write(`
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-                        .receipt { max-width: 300px; margin: 0 auto; }
-                        .header { text-align: center; margin-bottom: 20px; }
-                        .items { margin-bottom: 15px; }
-                        .item { display: flex; justify-content: space-between; margin-bottom: 5px; }
-                        .totals { margin-top: 10px; border-top: 1px dashed #000; padding-top: 10px; }
-                        .total-line { display: flex; justify-content: space-between; margin-bottom: 5px; }
-                        .restaurant-info { text-align: center; margin-top: 20px; font-size: 12px; }
-                        .no-print { display: none; }
-                        @media print {
-                            body { padding: 0; margin: 0; }
-                            .receipt { max-width: 100%; }
-                        }
-                    </style>
-                `);
-                
-                printWindow.document.write('</head><body>');
-                
-                // Remove action buttons
-                const actionButtons = receiptContent.querySelectorAll('.no-print, button, a');
-                actionButtons.forEach(btn => btn.remove());
-                
-                printWindow.document.write('<div class="receipt">');
-                printWindow.document.write('<div class="header"><h2>REÇU DE COMMANDE</h2></div>');
-                printWindow.document.write(receiptContent.innerHTML);
-                printWindow.document.write('</div>');
-                printWindow.document.write('</body></html>');
-                
-                printWindow.document.close();
-                printWindow.focus();
-                
-                // Print after a short delay to ensure content is loaded
-                setTimeout(() => {
-                    printWindow.print();
-                    printWindow.close();
-                }, 300);
-            }
         });
     </script>
 @endsection
