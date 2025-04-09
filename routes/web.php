@@ -71,16 +71,23 @@ Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function()
     Route::resource('menus', MenuController::class);
     Route::resource('tables', TableController::class);
     Route::resource('waiters', WaiterController::class);
-    Route::resource('sales', SaleController::class);
 });
+
 
 // Waiter routes
 Route::middleware(['auth', 'role:waiter'])->prefix('waiter')->group(function() {
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::resource('sales', SaleController::class);
     // Add more waiter-specific routes here
+    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
+    // Route::post('sales', [SaleController::class, 'store'])->name('sales.store');
 });
 
-// Common routes for authenticated users
+Route::middleware(['auth','role:waiter','role:waiter'])->group(function() {
+    Route::resource('sales', SaleController::class);
+    
+});
+
 
 Route::fallback(function () {
     return view('errors.404');

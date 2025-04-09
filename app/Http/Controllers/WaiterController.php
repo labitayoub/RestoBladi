@@ -7,6 +7,7 @@ use App\Models\Waiter;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class WaiterController extends Controller
 {
@@ -18,7 +19,7 @@ class WaiterController extends Controller
     public function index()
     {
         // Get waiters with their associated users
-        $waiters = Waiter::with('user')->get();
+        $waiters = Waiter::with('user')->latest()->paginate(10);
         return view('manager.gestion.waiters.index', compact('waiters'));
     }
 
@@ -62,14 +63,12 @@ class WaiterController extends Controller
                 'role_id' => 3,
             ]);
             
-            // Convert status string to boolean (active=1, inactive=0)
-            $statusBool = ($request->status === 'active') ? 1 : 0;
-            
-            // Create the waiter with the new user's ID
+            // Create the waiter with manager_id from authenticated user
             Waiter::create([
                 'user_id' => $user->id,
                 'phone_number' => $request->phone_number,
-                'status' => $statusBool,
+                'status' => $request->status === 'active' ? 1 : 0,
+                'manager_id' => Auth::id(),
             ]);
             
             DB::commit();

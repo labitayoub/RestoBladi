@@ -9,7 +9,7 @@
             <h1 class="text-4xl md:text-6xl font-bold mb-6 text-shadow-lg">RestoBladi Manager</h1>
             <p class="text-xl md:text-2xl mb-8 text-shadow">Plateforme de gestion pour votre restaurant marocain</p>
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="#dashboard" class="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition duration-300 shadow-md hover:shadow-lg">
+                <a href="/dashboard" class="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition duration-300 shadow-md hover:shadow-lg">
                     Accéder au tableau de bord
                 </a>
                 <a href="#features" class="bg-white text-orange-600 px-6 py-3 rounded-lg hover:bg-gray-100 transition duration-300 shadow-md hover:shadow-lg">
