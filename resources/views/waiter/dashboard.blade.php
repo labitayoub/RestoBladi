@@ -196,9 +196,7 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 <div class="flex justify-end space-x-2">
-                                                    <a href="{{ route('sales.edit', $sale->id) }}" class="text-yellow-600 hover:text-yellow-900">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
+                                                    
                                                     <button type="button" onclick="printReceipt({{ $sale->id }})" class="text-blue-600 hover:text-blue-900">
                                                         <i class="fas fa-print"></i>
                                                     </button>
@@ -440,30 +438,8 @@
 
 <script>
     function printReceipt(id) {
-        // Create a new window
-        const printWindow = window.open('', '_blank');
-        
-        // Fetch the receipt content
-        fetch(`/sales/${id}/receipt`)
-            .then(response => response.text())
-            .then(html => {
-                // Populate the new window with the receipt HTML
-                printWindow.document.write(html);
-                printWindow.document.close();
-                
-                // Trigger print after the content is loaded
-                printWindow.onload = function() {
-                    printWindow.print();
-                    printWindow.onafterprint = function() {
-                        printWindow.close();
-                    };
-                };
-            })
-            .catch(error => {
-                console.error('Error fetching receipt:', error);
-                printWindow.close();
-                alert('Erreur lors de l\'impression du reçu');
-            });
+        const printWindow = window.open(`/sales/${id}/receipt`, '_blank');
+        printWindow.focus();
     }
     
     function refreshPage() {

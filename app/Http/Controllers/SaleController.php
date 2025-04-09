@@ -90,8 +90,8 @@ class SaleController extends Controller
      */
     public function show(Sale $sale)
     {
-        $sale->load(['menus', 'tables', 'waiter']);
-        return view('sales.show', compact('sale'));
+        $sale->load(['menus', 'tables', 'waiter']); // Charger les relations nécessaires
+        return view('waiter.sales.show', compact('sale')); // Retourner la vue avec les données
     }
 
     /**

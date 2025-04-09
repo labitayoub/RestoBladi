@@ -91,9 +91,15 @@
                                                 </td>
 
                                                 <td class="d-flex flex-row justify-content-center align-items-center">
-                                                    <a href="{{ route("sales.edit",$sale->id) }}" class="btn btn-warning mr-1">
+                                                    <a href="{{ route('sales.show', $sale->id) }}" class="btn btn-info mr-1">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a href="{{ route('sales.edit', $sale->id) }}" class="btn btn-warning mr-1">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
+                                                    <button type="button" onclick="printReceipt({{ $sale->id }})" class="btn btn-primary">
+                                                        <i class="fas fa-print"></i>
+                                                    </button>
                                                     <form id="{{ $sale->id }}" action="{{ route("sales.destroy",$sale->id) }}" method="post">
                                                         @csrf
                                                         @method("DELETE")
@@ -122,4 +128,10 @@
             </div>
         </div>
     </div>
+    <script>
+        function printReceipt(id) {
+            const printWindow = window.open(`/sales/${id}/receipt`, '_blank');
+            printWindow.focus();
+        }
+    </script>
 @endsection

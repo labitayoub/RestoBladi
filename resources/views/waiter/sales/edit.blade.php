@@ -3,9 +3,8 @@
 
 @section("content")
     <div class="container">
-        <form id="add-sale" action="{{ route("sales.update",$sale->id) }}" method="post">
+        <form id="add-sale" action="{{ route("sales.store") }}" method="post">
             @csrf
-            @method("PUT")
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="row">
@@ -29,7 +28,6 @@
                                             <div class="align-self-end">
                                                 <input type="checkbox" name="table_id[]"
                                                     id="table"
-                                                    checked
                                                     value="{{ $table->id }}"
                                                 >
                                             </div>
@@ -58,7 +56,6 @@
                                         <div class="align-self-end">
                                             <input type="checkbox" name="menu_id[]"
                                                 id="menu_id"
-                                                checked
                                                 value="{{ $menu->id }}"
                                             >
                                         </div>
@@ -87,9 +84,7 @@
                                         Sérveur
                                     </option>
                                     @foreach ($servants as $servant)
-                                        <option
-                                            {{ $servant->id === $sale->servant_id ? "selected" : "" }}
-                                            value="{{ $servant->id }}">
+                                        <option value="{{ $servant->id }}">
                                             {{ $servant->name }}
                                         </option>
                                     @endforeach
@@ -105,7 +100,6 @@
                                     name="quantity"
                                     class="form-control"
                                     placeholder="Qté"
-                                    value="{{ $sale->quantity }}"
                                 >
                             </div>
                             <div class="input-group mb-3">
@@ -118,7 +112,6 @@
                                     name="total_price"
                                     class="form-control"
                                     placeholder="Prix"
-                                     value="{{ $sale->total_price }}"
                                 >
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -136,7 +129,6 @@
                                     name="total_received"
                                     class="form-control"
                                     placeholder="Total"
-                                     value="{{ $sale->total_received }}"
                                 >
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -154,7 +146,6 @@
                                     name="change"
                                     class="form-control"
                                     placeholder="Reste"
-                                     value="{{ $sale->change }}"
                                 >
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -167,14 +158,10 @@
                                     <option value="" selected disabled>
                                         Type de paiement
                                     </option>
-                                    <option value="cash"
-                                        {{ $sale->payment_type === "cash" ? "selected" : ""}}
-                                        >
+                                    <option value="cash">
                                         Espéce
                                     </option>
-                                    <option value="card"
-                                    {{ $sale->payment_type === "card" ? "selected" : ""}}
-                                    >
+                                    <option value="card">
                                         Carte bancaire
                                     </option>
                                 </select>
@@ -184,22 +171,17 @@
                                     <option value="" selected disabled>
                                         Etat de paiement
                                     </option>
-                                    <option value="paid" {{ $sale->payment_status === "paid" ? "selected" : ""}}>
+                                    <option value="paid">
                                         Payé
                                     </option>
-                                    <option value="unpaid" {{ $sale->payment_status === "unpaid" ? "selected" : ""}}>
+                                    <option value="unpaid">
                                         Impayé
                                     </option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <button
-                                    onclick="event.preventDefault();
-                                        document.getElementById("add-sale").submit();
-                                    "
-                                    class="btn btn-primary"
-                                >
-                                    Valider
+                                <button type="submit" class="btn btn-primary">
+                                    Ajouter
                                 </button>
                             </div>
                         </div>
