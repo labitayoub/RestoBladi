@@ -273,10 +273,11 @@
                             @php
                                 $startDate = now()->subDays(6)->startOfDay();
                                 $endDate = now()->endOfDay();
-                                
+                                // dd('date'.$startDate);   
                                 $dailyStats = [];
                                 $currentDate = clone $startDate;
-                                
+                                // dd('date'.$currentDate);
+
                                 while ($currentDate <= $endDate) {
                                     $day = $currentDate->format('Y-m-d');
                                     $dayFormatted = $currentDate->format('D');
@@ -298,6 +299,7 @@
                                 }
                                 
                                 $maxSales = collect($dailyStats)->max('total') ?: 1;
+                                // dd($maxSales);
                             @endphp
                             
                             @foreach($dailyStats as $stat)

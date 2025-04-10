@@ -65,7 +65,7 @@
                         
                         <!-- Quick Access -->
                         <h4 class="text-lg font-semibold text-gray-700 mb-4">Accès rapide</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
                             <a href="{{ route('categories.index') }}" class="bg-white p-4 rounded-lg shadow text-center hover:bg-gray-50 transition duration-200">
                                 <i class="fas fa-th-list text-2xl text-orange-500 mb-2"></i>
                                 <p class="text-gray-600">Catégories</p>
@@ -84,6 +84,11 @@
                             <a href="{{ route('waiters.index') }}" class="bg-white p-4 rounded-lg shadow text-center hover:bg-gray-50 transition duration-200">
                                 <i class="fas fa-user-tie text-2xl text-orange-500 mb-2"></i>
                                 <p class="text-gray-600">Serveurs</p>
+                            </a>
+                            
+                            <a href="{{ route('settings') }}" class="bg-white p-4 rounded-lg shadow text-center hover:bg-gray-50 transition duration-200">
+                                <i class="fas fa-cog text-2xl text-orange-500 mb-2"></i>
+                                <p class="text-gray-600">Paramètres</p>
                             </a>
                         </div>
                     </div>

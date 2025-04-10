@@ -68,9 +68,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <a href="#" class="flex items-center bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm font-medium transition duration-150 ease-in-out" onclick="refreshPage()">
-                                    <i class="fas fa-sync-alt mr-2"></i> Actualiser
+                            <div class="mb-4">
+                                <a href="#" class="flex items-center justify-center bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-2.5 px-5 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg border border-orange-600" onclick="refreshPage()">
+                                    <i class="fas fa-sync-alt mr-2 animate-spin-hover"></i> Actualiser les tables
                                 </a>
                             </div>
                             
@@ -562,10 +562,9 @@
             }
             
             // Fixed undefined function refreshPage by adding a simple implementation
-            function refreshPage() {
-                location.reload();
-            }
-        });
+    
+        }
+    );
 
         // Fonction pour imprimer le reçu de paiement
         function printReceipt(saleId) {
@@ -625,5 +624,38 @@
             
             printWindow.document.close();
         }
+        function refreshPage() {
+        // Add a loading indicator
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '9999';
+        
+        const spinner = document.createElement('div');
+        spinner.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x text-orange-500"></i>';
+        overlay.appendChild(spinner);
+        
+        document.body.appendChild(overlay);
+        
+        // Refresh the page after a short delay
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Any dashboard-specific JavaScript can go here
+        
+        // Set up auto-refresh (every 5 minutes)
+        const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+        setInterval(refreshPage, REFRESH_INTERVAL);
+    });
     </script>
 @endsection
