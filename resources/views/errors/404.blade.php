@@ -70,28 +70,11 @@ body{
               <h1>Error 404</h1>
               <p>Erreur ! L'adresse que tu as entrée est incorrecte.</p>
               <div class="buttons">
-                  <a href="#" id="backButton" class="btn">⬅️ Retour en arrière</a>
+                  <a href="javascript:history.back()" id="backButton" class="btn">⬅️ Retour en arrière</a>
                   <a href="{{ url('/') }}" class="btn">🏠 Page d'accueil</a>
               </div>
         </div>
     </div>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const backButton = document.getElementById('backButton');
-            
-            backButton.addEventListener('click', function(event) {
-                event.preventDefault();
-                
-                // Vérifie si l'historique de navigation existe
-                if (window.history && window.history.length > 1) {
-                    window.history.back();
-                } else {
-                    // Si pas d'historique, redirige vers la page d'accueil
-                    window.location.href = '{{ url("/") }}';
-                }
-            });
-        });
-    </script>
 </body>
 </html>

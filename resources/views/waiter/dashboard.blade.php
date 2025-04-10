@@ -146,8 +146,8 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @php
                                         $recentSales = \App\Models\Sale::where('waiter_id', $waiterId)
-                                            ->where('created_at', '>=', now()->subDay())
-                                            ->with(['menus', 'tables'])
+                                        ->whereDate('created_at', today())
+                                        ->with(['menus', 'tables'])
                                             ->orderBy('created_at', 'desc')
                                             ->take(10)
                                             ->get();
@@ -229,8 +229,8 @@
                         <div class="space-y-3">
                             @php
                                 $topMenus = \App\Models\Sale::where('waiter_id', $waiterId)
-                                    ->whereDate('created_at', '>=', now()->subDays(7))
-                                    ->with('menus')
+                                ->whereDate('created_at', today())
+                                ->with('menus')
                                     ->get()
                                     ->pluck('menus')
                                     ->flatten()
