@@ -72,6 +72,7 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 // Admin routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function() {
     Route::get('managers', [AdminController::class, 'index'])->name('admin.managers');
+    Route::get('managers/{id}', [AdminController::class, 'show'])->name('admin.managers.show');
     Route::post('managers/{id}/approve', [AdminController::class, 'approveManager'])->name('admin.managers.approve');
     Route::post('managers/{id}/reject', [AdminController::class, 'rejectManager'])->name('admin.managers.reject');
     Route::post('managers/{id}/reset', [AdminController::class, 'resetManagerStatus'])->name('admin.managers.reset');

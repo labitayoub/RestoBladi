@@ -20,7 +20,18 @@ class AdminController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->get();
         
-        return view('admin.managers.index', compact('managers'));
+        return view('admin.index', compact('managers'));
+    }
+
+    /**
+     * Afficher les détails d'un manager
+     */
+    public function show($id)
+    {
+        $manager = Manager::with(['user', 'restaurant', 'waiters.user'])
+                    ->findOrFail($id);
+        
+        return view('admin.show', compact('manager'));
     }
 
     /**
