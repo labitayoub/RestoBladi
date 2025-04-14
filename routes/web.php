@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\WaiterController;
+use App\Http\Controllers\WaiterDashboardController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SaleController;
@@ -44,9 +45,9 @@ Route::get('/dashboard', function () {
         if ($user->role_id == 2) {
             return view('manager.dashboard');
         } 
-        // Add other role conditions as needed
+        // Redirect to the waiter dashboard controller
         elseif ($user->role_id == 3) { 
-            return view('waiter.dashboard'); 
+            return redirect()->route('waiter.dashboard');
         }
         else {
             return view('admin.dashboard');
@@ -79,16 +80,14 @@ Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function()
 
 // Waiter routes
 Route::middleware(['auth', 'role:waiter'])->prefix('waiter')->group(function() {
+    Route::get('dashboard', [WaiterDashboardController::class, 'index'])->name('waiter.dashboard');
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::resource('sales', SaleController::class);
     // Add more waiter-specific routes here
-    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
-    // Route::post('sales', [SaleController::class, 'store'])->name('sales.store');
 });
 
-Route::middleware(['auth','role:waiter','role:waiter'])->group(function() {
+Route::middleware(['auth','role:waiter'])->group(function() {
     Route::resource('sales', SaleController::class);
-    
 });
 
 

@@ -17,7 +17,7 @@ class TableController extends Controller
      */
     public function index()
     {
-        //
+        
         return view("manager.gestion.tables.index")->with([
             "tables" => Table::paginate(5)
         ]);
