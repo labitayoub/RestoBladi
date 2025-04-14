@@ -12,6 +12,7 @@ use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ManagerDashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Menu;
@@ -74,9 +75,9 @@ Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function()
     Route::resource('menus', MenuController::class);
     Route::resource('tables', TableController::class);
     Route::resource('waiters', WaiterController::class);
-    Route::get('/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings');
-    Route::put('/settings/profile', [App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.profile.update');
-    Route::put('/settings/password', [App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('settings.password.update');
+    Route::get('/settings', SettingsController::class, 'index')->name('settings');
+    Route::put('/settings/profile', SettingsController::class, 'updateProfile')->name('settings.profile.update');
+    Route::put('/settings/password', SettingsController::class, 'updatePassword')->name('settings.password.update');
 });
 
 

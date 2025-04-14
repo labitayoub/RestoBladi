@@ -41,16 +41,8 @@ class MenuController extends Controller
      * @param  \App\Http\Requests\StoreMenuRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMenuRequest $request)
     {
-        //validation
-        $this->validate($request, [
-            "title" => "required|min:3|unique:menus,title",
-            "description" => "required|min:5",
-            "image" => "required|image|mimes:png,jpg,jpeg|max:2048",
-            "price" => "required|numeric",
-            "category_id" => "required|numeric",
-        ]);
         //store data
         if ($request->hasFile("image")) {
             $file = $request->image;
@@ -101,21 +93,12 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\UpdateMenuRequest  $request
      * @param  \App\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Menu $menu)
+    public function update(UpdateMenuRequest $request, Menu $menu)
     {
-        //validation
-        $this->validate($request, [
-            "title" => "required|min:3|unique:menus,title," . $menu->id,
-            "description" => "required|min:5",
-            "image" => "image|mimes:png,jpg,jpeg|max:2048",
-            "price" => "required|numeric",
-            "category_id" => "required|numeric",
-        ]);
-        
         $title = $request->title;
         $updateData = [
             "title" => $title,
