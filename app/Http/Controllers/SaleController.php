@@ -40,26 +40,12 @@ class SaleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreSaleRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreSaleRequest $request)
     {
-        $request->validate([
-            "table_id" => "required|array",
-            "table_id.*" => "exists:tables,id",
-            "menu_id" => "required|array",
-            "menu_id.*" => "exists:menus,id",
-            "total_ht" => "required|numeric",
-            "tva" => "required|numeric",
-            "total_ttc" => "required|numeric",
-            "payment_type" => "required|in:cash,card",
-            "waiter_id" => "required|exists:waiters,id",
-        ]);
-
         $waiter = \App\Models\Waiter::where('user_id', Auth::id())->first();
-
-
 
         // Créer une nouvelle vente
         $sale = new Sale();
@@ -119,25 +105,12 @@ class SaleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\UpdateSaleRequest  $request
      * @param  \App\Models\Sale  $sale
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Sale $sale)
+    public function update(UpdateSaleRequest $request, Sale $sale)
     {
-        // Valider les données entrantes
-        $request->validate([
-            "table_id" => "required|array",
-            "table_id.*" => "exists:tables,id",
-            "menu_id" => "required|array",
-            "menu_id.*" => "exists:menus,id",
-            "total_ht" => "required|numeric",
-            "tva" => "required|numeric",
-            "total_ttc" => "required|numeric",
-            "payment_type" => "required|in:cash,card",
-            "waiter_id" => "required|exists:waiters,id",
-        ]);
-    
         // Mettre à jour les données de la vente
         $sale->total_ht = $request->total_ht;
         $sale->tva = $request->tva;

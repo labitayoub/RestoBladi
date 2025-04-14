@@ -13,7 +13,7 @@ class UpdateSaleRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,15 @@ class UpdateSaleRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "table_id" => "required|array",
+            "table_id.*" => "exists:tables,id",
+            "menu_id" => "required|array",
+            "menu_id.*" => "exists:menus,id",
+            "total_ht" => "required|numeric",
+            "tva" => "required|numeric",
+            "total_ttc" => "required|numeric",
+            "payment_type" => "required|in:cash,card",
+            "waiter_id" => "required|exists:waiters,id",
         ];
     }
 }

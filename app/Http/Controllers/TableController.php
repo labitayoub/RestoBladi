@@ -46,18 +46,11 @@ class TableController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreTableRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTableRequest $request)
     {
-        //
-        //validation
-        $this->validate($request, [
-            "name" => "required|unique:tables,name",
-            "status" => "required|boolean"
-        ]);
-        
         // Récupérer l'utilisateur authentifié
         $user = Auth::user();
         // Récupérer le manager associé à l'utilisateur authentifié
@@ -105,19 +98,12 @@ class TableController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Table  $table
+     * @param  \App\Http\Requests\UpdateTableRequest  $request
+     * @param  \App\Models\Table  $table
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Table $table)
+    public function update(UpdateTableRequest $request, Table $table)
     {
-        //
-        //validation
-        $this->validate($request, [
-            "name" => "required|unique:tables,name," . $table->id,
-            "status" => "required|boolean"
-        ]);
-        
         // Récupérer l'utilisateur authentifié
         $user = Auth::user();
         // Récupérer le manager associé à l'utilisateur authentifié
