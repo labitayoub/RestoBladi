@@ -33,7 +33,7 @@
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-600">Menus</p>
-                                        <p class="text-xl font-semibold">{{ \App\Models\Menu::count() ?? 0 }}</p>
+                                        <p class="text-xl font-semibold">{{ $menuCount ?? 0 }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-600">Tables</p>
-                                        <p class="text-xl font-semibold">{{ \App\Models\Table::count() ?? 0 }}</p>
+                                        <p class="text-xl font-semibold">{{ $tableCount ?? 0 }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-600">Serveurs</p>
-                                        <p class="text-xl font-semibold">{{ \App\Models\Waiter::count() ?? 0 }}</p>
+                                        <p class="text-xl font-semibold">{{ $waiterCount ?? 0 }}</p>
                                     </div>
                                 </div>
                             </div>

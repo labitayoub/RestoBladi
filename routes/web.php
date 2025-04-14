@@ -9,6 +9,7 @@ use App\Http\Controllers\TableController;
 use App\Http\Controllers\WaiterController;
 use App\Http\Controllers\WaiterDashboardController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\ManagerDashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,7 @@ Route::get('/dashboard', function () {
         $user = Auth::user();
         // Assuming role_id 2 is for managers
         if ($user->role_id == 2) {
-            return view('manager.dashboard');
+            return redirect()->route('manager.dashboard');
         } 
         // Redirect to the waiter dashboard controller
         elseif ($user->role_id == 3) { 
@@ -68,6 +69,7 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 // Manager routes
 Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function() {
+    Route::get('dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
     Route::resource('categories', CategoryController::class);
     Route::resource('menus', MenuController::class);
     Route::resource('tables', TableController::class);
