@@ -59,14 +59,14 @@ class AdminController extends Controller
     }
 
     /**
-     * Réinitialiser le statut d'un manager à "en attente"
+     * Réinitialiser le statut d'un manager à "approved"
      */
     public function resetManagerStatus($id)
     {
         $manager = Manager::findOrFail($id);
-        $manager->status = Manager::STATUS_PENDING;
+        $manager->status = Manager::STATUS_APPROVED;
         $manager->save();
 
-        return redirect()->route('admin.managers')->with('success', 'Le statut du manager a été réinitialisé à "en attente".');
+        return redirect()->route('admin.managers')->with('success', 'Le statut du manager a été réinitialisé à "approuvé".');
     }
 }

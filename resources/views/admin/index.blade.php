@@ -68,7 +68,7 @@
                                         {{ $manager->restaurant->name ?? 'Non défini' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        @if ($manager->status === 'active')
+                                        @if ($manager->status === 'approved')
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                 Actif
                                             </span>
@@ -84,24 +84,25 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                         <div class="flex justify-center space-x-2">
-                                            @if ($manager->status === 'pending')
-                                                <form action="{{ route('admin.managers.approve', $manager->id) }}" method="post">
+                                            @if ($manager->status === 'rejected')
+                                                <form action="{{ route('admin.managers.reset', $manager->id) }}" method="post">
                                                     @csrf
-                                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out">
+                                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out" title="Approuver">
                                                         <i class="fas fa-check"></i>
                                                     </button>
                                                 </form>
+                                            @elseif ($manager->status === 'approved')
                                                 <form action="{{ route('admin.managers.reject', $manager->id) }}" method="post">
                                                     @csrf
-                                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out">
+                                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out" title="Rejeter">
                                                         <i class="fas fa-times"></i>
                                                     </button>
                                                 </form>
-                                            @elseif ($manager->status === 'active' || $manager->status === 'rejected')
-                                                <form action="{{ route('admin.managers.reset', $manager->id) }}" method="post">
+                                            @elseif ($manager->status === 'pending')
+                                                <form action="{{ route('admin.managers.approve', $manager->id) }}" method="post">
                                                     @csrf
-                                                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out">
-                                                        <i class="fas fa-undo"></i>
+                                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out" title="Approuver">
+                                                        <i class="fas fa-check"></i>
                                                     </button>
                                                 </form>
                                             @endif
