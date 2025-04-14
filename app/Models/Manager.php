@@ -9,6 +9,11 @@ class Manager extends Model
 {
     use HasFactory;
 
+    // Définition des constantes de statut
+    const STATUS_PENDING = 'pending';
+    const STATUS_APPROVED = 'approved';
+    const STATUS_REJECTED = 'rejected';
+
     protected $table = 'managers';
 
     protected $fillable = [
@@ -32,8 +37,9 @@ class Manager extends Model
     {
         return $this->belongsTo(Restaurant::class);
     }
+    
     public function waiters()
-{
-    return $this->hasMany(Waiter::class);
-}
+    {
+        return $this->hasMany(Waiter::class);
+    }
 }

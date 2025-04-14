@@ -28,7 +28,7 @@ class ReportsController extends Controller
             ->take(7)
             ->get();
             
-        return view('reports.index', compact('dailySales'));
+        return view('manager.rapport.index', compact('dailySales'));
     }
 
     /**

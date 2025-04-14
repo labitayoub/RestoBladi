@@ -13,6 +13,7 @@ use App\Http\Controllers\ManagerDashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Menu;
@@ -52,7 +53,7 @@ Route::get('/dashboard', function () {
             return redirect()->route('waiter.dashboard');
         }
         else {
-            return view('admin.dashboard');
+            return redirect()->route('admin.managers');
         }
     }
     
@@ -67,6 +68,14 @@ Route::get('login', [LoginController::class, 'showloginForm'])->name('login.form
 Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+// Admin routes
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function() {
+    Route::get('managers', [AdminController::class, 'index'])->name('admin.managers');
+    Route::post('managers/{id}/approve', [AdminController::class, 'approveManager'])->name('admin.managers.approve');
+    Route::post('managers/{id}/reject', [AdminController::class, 'rejectManager'])->name('admin.managers.reject');
+    Route::post('managers/{id}/reset', [AdminController::class, 'resetManagerStatus'])->name('admin.managers.reset');
+});
 
 // Manager routes
 Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function() {
@@ -85,7 +94,6 @@ Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function()
     Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');
     Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password.update');
 });
-
 
 // Waiter routes
 Route::middleware(['auth', 'role:waiter'])->prefix('waiter')->group(function() {
