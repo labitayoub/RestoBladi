@@ -75,6 +75,12 @@ Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function()
     Route::resource('menus', MenuController::class);
     Route::resource('tables', TableController::class);
     Route::resource('waiters', WaiterController::class);
+    
+    // Reports routes
+    Route::get('reports', [App\Http\Controllers\ReportsController::class, 'index'])->name('reports.index');
+    Route::post('reports/generate', [App\Http\Controllers\ReportsController::class, 'generate'])->name('reports.generate');
+    Route::post('reports/export', [App\Http\Controllers\ReportsController::class, 'export'])->name('reports.export');
+    
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');
     Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password.update');

@@ -25,6 +25,12 @@
             <i class="fas fa-user-cog w-6 text-orange-500"></i>
             <span class="ml-2 font-medium">Sérveurs</span>
         </a>
+        
+        <a href="{{ route('reports.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
+            <i class="fas fa-chart-bar w-6 text-orange-500"></i>
+            <span class="ml-2 font-medium">Rapports</span>
+        </a>
+        
         <a href="{{ route('settings') }}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition duration-150 ease-in-out border-l-4 border-transparent hover:border-orange-400">
             <i class="fas fa-user-cog w-6 text-orange-500"></i>
             <span class="ml-2 font-medium">Paramètre</span>
