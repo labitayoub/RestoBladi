@@ -68,9 +68,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <a href="#" class="flex items-center bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm font-medium transition duration-150 ease-in-out" onclick="refreshPage()">
-                                    <i class="fas fa-sync-alt mr-2"></i> Actualiser
+                            <div class="mb-4">
+                                <a href="#" class="flex items-center justify-center bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-2.5 px-5 rounded-lg text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg border border-orange-600" onclick="refreshPage()">
+                                    <i class="fas fa-sync-alt mr-2 animate-spin-hover"></i> Actualiser les tables
                                 </a>
                             </div>
                             
@@ -379,7 +379,7 @@
                                                         type="text" 
                                                         id="waiter_info"
                                                         class="w-full pl-10 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
-                                                        value="{{ Auth::user()->name }} (ID: {{ Auth::id() }})"
+                                                        value="{{ Auth::user()->name }} "
                                                         readonly
                                                     >
                                                 </div>
@@ -562,58 +562,100 @@
             }
             
             // Fixed undefined function refreshPage by adding a simple implementation
-            function refreshPage() {
-                location.reload();
-            }
+    
+        }
+    );
 
-            // Fixed potential issue with printReceipt by ensuring the cloned content is properly handled
-            window.printReceipt = function(saleId) {
-                const receiptContent = document.getElementById(saleId).cloneNode(true);
-
-                // Create a new window for printing
-                const printWindow = window.open('', '_blank', 'height=600,width=800');
-                printWindow.document.write('<html><head><title>Reçu de commande</title>');
-
-                // Add styles
-                printWindow.document.write(`
+        // Fonction pour imprimer le reçu de paiement
+        function printReceipt(saleId) {
+            // Créer une nouvelle fenêtre pour l'impression
+            const printWindow = window.open('', '_blank', 'width=600,height=600');
+            
+            // Récupérer le contenu du reçu
+            const receiptContent = document.getElementById(saleId).cloneNode(true);
+            
+            // Supprimer les boutons d'action
+            const actionButtons = receiptContent.querySelectorAll('button, a');
+            actionButtons.forEach(btn => btn.remove());
+            
+            // Créer le HTML pour l'impression
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Reçu de paiement</title>
                     <style>
-                        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-                        .receipt { max-width: 300px; margin: 0 auto; }
-                        .header { text-align: center; margin-bottom: 20px; }
-                        .items { margin-bottom: 15px; }
-                        .item { display: flex; justify-content: space-between; margin-bottom: 5px; }
-                        .totals { margin-top: 10px; border-top: 1px dashed #000; padding-top: 10px; }
-                        .total-line { display: flex; justify-content: space-between; margin-bottom: 5px; }
-                        .restaurant-info { text-align: center; margin-top: 20px; font-size: 12px; }
-                        .no-print { display: none; }
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .receipt { max-width: 300px; margin: 0 auto; border: 1px solid #ddd; padding: 20px; }
+                        .header { text-align: center; margin-bottom: 15px; }
+                        .header h2 { margin: 0; color: #333; }
+                        .details { margin: 15px 0; }
+                        .detail-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+                        .total { font-weight: bold; margin-top: 10px; border-top: 1px dashed #000; padding-top: 10px; }
+                        .footer { margin-top: 20px; text-align: center; font-size: 12px; color: #666; }
                         @media print {
                             body { padding: 0; margin: 0; }
-                            .receipt { max-width: 100%; }
+                            .receipt { border: none; max-width: 100%; }
                         }
                     </style>
-                `);
-
-                printWindow.document.write('</head><body>');
-
-                // Remove action buttons
-                const actionButtons = receiptContent.querySelectorAll('.no-print, button, a');
-                actionButtons.forEach(btn => btn.remove());
-
-                printWindow.document.write('<div class="receipt">');
-                printWindow.document.write('<div class="header"><h2>REÇU DE COMMANDE</h2></div>');
-                printWindow.document.write(receiptContent.innerHTML);
-                printWindow.document.write('</div>');
-                printWindow.document.write('</body></html>');
-
-                printWindow.document.close();
-                printWindow.focus();
-
-                // Print after a short delay to ensure content is loaded
-                setTimeout(() => {
-                    printWindow.print();
-                    printWindow.close();
-                }, 300);
-            };
-        });
+                </head>
+                <body>
+                    <div class="receipt">
+                        <div class="header">
+                            <h2>REÇU DE PAIEMENT</h2>
+                            <small>${new Date().toLocaleDateString()}</small>
+                        </div>
+                        ${receiptContent.innerHTML}
+                        <div class="footer">
+                            <p>Merci pour votre visite !</p>
+                        </div>
+                    </div>
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() {
+                                window.close();
+                            }, 500);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+        }
+        function refreshPage() {
+        // Add a loading indicator
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '9999';
+        
+        const spinner = document.createElement('div');
+        spinner.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x text-orange-500"></i>';
+        overlay.appendChild(spinner);
+        
+        document.body.appendChild(overlay);
+        
+        // Refresh the page after a short delay
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Any dashboard-specific JavaScript can go here
+        
+        // Set up auto-refresh (every 5 minutes)
+        const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+        setInterval(refreshPage, REFRESH_INTERVAL);
+    });
     </script>
 @endsection

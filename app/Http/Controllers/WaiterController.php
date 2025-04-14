@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreWaiterRequest;
+use App\Http\Requests\UpdateWaiterRequest;
 
 class WaiterController extends Controller
 {
@@ -37,20 +39,11 @@ class WaiterController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreWaiterRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreWaiterRequest $request)
     {
-        // Validate both user and waiter information
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'phone_number' => 'required|string|max:20',
-            'status' => 'required|in:active,inactive',
-        ]);
-
         // Use a database transaction to ensure both user and waiter are created or none
         try {
             DB::beginTransaction();
@@ -107,20 +100,12 @@ class WaiterController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\UpdateWaiterRequest  $request
      * @param  \App\Models\Waiter  $waiter
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Waiter $waiter)
+    public function update(UpdateWaiterRequest $request, Waiter $waiter)
     {
-        // Validate both user and waiter information
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,'.$waiter->user->id,
-            'phone_number' => 'required|string|max:20',
-            'status' => 'required|in:active,inactive',
-        ]);
-
         try {
             DB::beginTransaction();
             

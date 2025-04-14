@@ -13,7 +13,7 @@ class UpdateWaiterRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,11 @@ class UpdateWaiterRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'.$this->waiter->user->id,
+            'password' => 'nullable|string|min:8',
+            'phone_number' => 'required|string|max:20',
+            'status' => 'required|in:active,inactive',
         ];
     }
 }

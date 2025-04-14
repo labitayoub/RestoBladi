@@ -11,7 +11,7 @@
                     <!-- Header Section -->
                     <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-6">
                         <div class="flex items-center">
-                            <a href="{{ route('sales.index') }}" class="text-gray-500 hover:text-gray-700 mr-4 transition duration-150">
+                            <a href="{{ route('orders.index') }}" class="text-gray-500 hover:text-gray-700 mr-4 transition duration-150">
                                 <i class="fas fa-chevron-left"></i>
                             </a>
                             <h3 class="text-xl font-bold text-gray-800">

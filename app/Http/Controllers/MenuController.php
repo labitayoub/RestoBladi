@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use App\Models\Category;
+use App\Models\Manager;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MenuController extends Controller
 {
@@ -18,8 +20,16 @@ class MenuController extends Controller
      */
     public function index()
     {
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        // Récupérer le manager associé à l'utilisateur authentifié
+        $manager = Manager::where('user_id', $user->id)->first();
+        
+        // Récupérer uniquement les menus du manager connecté
+        $menus = Menu::where('manager_id', $manager->id)->paginate(6);
+        
         return view("manager.gestion.menus.index")->with([
-            "menus" => Menu::paginate(6)
+            "menus" => $menus
         ]);
     }
 
@@ -30,8 +40,16 @@ class MenuController extends Controller
      */
     public function create()
     {
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        // Récupérer le manager associé à l'utilisateur authentifié
+        $manager = Manager::where('user_id', $user->id)->first();
+        
+        // Récupérer uniquement les catégories du manager connecté
+        $categories = Category::where('manager_id', $manager->id)->get();
+        
         return view("manager.gestion.menus.create")->with([
-            "categories" => Category::all()
+            "categories" => $categories
         ]);
     }
 
@@ -41,18 +59,15 @@ class MenuController extends Controller
      * @param  \App\Http\Requests\StoreMenuRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMenuRequest $request)
     {
-        //validation
-        $this->validate($request, [
-            "title" => "required|min:3|unique:menus,title",
-            "description" => "required|min:5",
-            "image" => "required|image|mimes:png,jpg,jpeg|max:2048",
-            "price" => "required|numeric",
-            "category_id" => "required|numeric",
-        ]);
         //store data
         if ($request->hasFile("image")) {
+            // Récupérer l'utilisateur authentifié
+            $user = Auth::user();
+            // Récupérer le manager associé à l'utilisateur authentifié
+            $manager = Manager::where('user_id', $user->id)->first();
+            
             $file = $request->image;
             $imageName = time() . "_" . $file->getClientOriginalName();
             $file->move(public_path('images/menus'), $imageName);
@@ -64,6 +79,7 @@ class MenuController extends Controller
                 "price" =>  $request->price,
                 "category_id" =>  $request->category_id,
                 "image" =>  $imageName,
+                "manager_id" => $manager->id // Ajouter l'ID du manager
             ]);
             //redirect user
             return redirect()->route("menus.index")->with([
@@ -91,9 +107,16 @@ class MenuController extends Controller
      */
     public function edit(Menu $menu)
     {
-        //
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        // Récupérer le manager associé à l'utilisateur authentifié
+        $manager = Manager::where('user_id', $user->id)->first();
+        
+        // Récupérer uniquement les catégories du manager connecté
+        $categories = Category::where('manager_id', $manager->id)->get();
+        
         return view("manager.gestion.menus.edit")->with([
-            "categories" => Category::all(),
+            "categories" => $categories,
             "menu" => $menu
         ]);
     }
@@ -101,20 +124,16 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\UpdateMenuRequest  $request
      * @param  \App\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Menu $menu)
+    public function update(UpdateMenuRequest $request, Menu $menu)
     {
-        //validation
-        $this->validate($request, [
-            "title" => "required|min:3|unique:menus,title," . $menu->id,
-            "description" => "required|min:5",
-            "image" => "image|mimes:png,jpg,jpeg|max:2048",
-            "price" => "required|numeric",
-            "category_id" => "required|numeric",
-        ]);
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        // Récupérer le manager associé à l'utilisateur authentifié
+        $manager = Manager::where('user_id', $user->id)->first();
         
         $title = $request->title;
         $updateData = [
@@ -122,7 +141,8 @@ class MenuController extends Controller
             "slug" => Str::slug($title),
             "description" => $request->description,
             "price" => $request->price,
-            "category_id" => $request->category_id
+            "category_id" => $request->category_id,
+            "manager_id" => $manager->id // Ajouter l'ID du manager
         ];
         
         // Traitement de l'image si une nouvelle est fournie

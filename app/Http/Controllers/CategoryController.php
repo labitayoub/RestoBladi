@@ -7,6 +7,9 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Http\Requests\UpdateCategoryRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Manager;
+
 class CategoryController extends Controller
 {
     /**
@@ -16,9 +19,16 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        // Récupérer le manager associé à l'utilisateur authentifié
+        $manager = Manager::where('user_id', $user->id)->first();
+        
+        // Récupérer uniquement les catégories du manager connecté
+        $categories = Category::where('manager_id', $manager->id)->paginate(6);
         
         return view("manager.gestion.categories.index")->with([
-            "categories" => Category::paginate(6)]);
+            "categories" => $categories]);
     }
 
     /**
@@ -40,10 +50,18 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $form = $request->validated();
+        
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        // Récupérer le manager associé à l'utilisateur authentifié
+        $manager = Manager::where('user_id', $user->id)->first();
+        
         Category::create([
-            "title"=> $form["title"],
-            "slug"=>Str::slug($form["title"])
+            "title" => $form["title"],
+            "slug" => Str::slug($form["title"]),
+            "manager_id" => $manager->id // Ajouter l'ID du manager
         ]);
+        
         return redirect()->route("categories.index")->with("success", "categorie cree avec succes");
     }
 
@@ -79,11 +97,18 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $form = $request->validated();
+        
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        // Récupérer le manager associé à l'utilisateur authentifié
+        $manager = Manager::where('user_id', $user->id)->first();
 
         $category->update([
-            "title"=> $form["title"],
-            "slug"=>Str::slug($form["title"])
+            "title" => $form["title"],
+            "slug" => Str::slug($form["title"]),
+            "manager_id" => $manager->id // Ajouter l'ID du manager
         ]);
+        
         return redirect()->route("categories.index")->with("success", "categorie modifie avec succes");
     }
 

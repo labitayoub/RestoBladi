@@ -14,26 +14,25 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        
-    //     User::insert([
-    //         [
-    //             'id' => 1,
-    //             'name' => 'admin',
-    //             'email' => 'admin@restobladi.com',
-    //             'password' => bcrypt('password1234'),
-    //             'role_id' => 1,
-    //             'created_at' => now(),
-    //             'updated_at' => now(),
-    //         ],
-    //         [
-    //             'id' => 2,
-    //             'name' => 'waiter',
-    //             'email' =>'waiter@restobladi.com',
-    //             'password' => bcrypt('password1234'),
-    //             'role_id' => 2,
-    //             'created_at' => now(),
-    //             'updated_at' => now(),
-    //         ],  
-    //     ]);
+        User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@retobladi.com',
+            'password' => bcrypt('12345678'),
+            'role_id' => 1, // Admin role
+        ]);
+
+        User::create([
+            'name' => 'Manager User',
+            'email' => 'manager@retobladi.com',
+            'password' => bcrypt('12345678'),
+            'role_id' => 2, // Manager role
+        ]);
+
+        User::create([
+            'name' => 'Waiter User',
+            'email' => 'waiter@retobladi.com',
+            'password' => bcrypt('12345678'),
+            'role_id' => 3, // Waiter role
+        ]);
     }
 }

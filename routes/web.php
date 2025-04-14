@@ -7,9 +7,13 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\WaiterController;
+use App\Http\Controllers\WaiterDashboardController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\ManagerDashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Menu;
@@ -42,14 +46,14 @@ Route::get('/dashboard', function () {
         $user = Auth::user();
         // Assuming role_id 2 is for managers
         if ($user->role_id == 2) {
-            return view('manager.dashboard');
+            return redirect()->route('manager.dashboard');
         } 
-        // Add other role conditions as needed
+        // Redirect to the waiter dashboard controller
         elseif ($user->role_id == 3) { 
-            return view('waiter.dashboard'); 
+            return redirect()->route('waiter.dashboard');
         }
         else {
-            return view('admin.dashboard');
+            return redirect()->route('admin.managers');
         }
     }
     
@@ -65,27 +69,43 @@ Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
+// Admin routes
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function() {
+    Route::get('managers', [AdminController::class, 'index'])->name('admin.managers');
+    Route::get('managers/{id}', [AdminController::class, 'show'])->name('admin.managers.show');
+    Route::post('managers/{id}/approve', [AdminController::class, 'approveManager'])->name('admin.managers.approve');
+    Route::post('managers/{id}/reject', [AdminController::class, 'rejectManager'])->name('admin.managers.reject');
+    Route::post('managers/{id}/reset', [AdminController::class, 'resetManagerStatus'])->name('admin.managers.reset');
+});
+
 // Manager routes
 Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function() {
+    Route::get('dashboard', [ManagerDashboardController::class, 'index'])->name('manager.dashboard');
     Route::resource('categories', CategoryController::class);
     Route::resource('menus', MenuController::class);
     Route::resource('tables', TableController::class);
     Route::resource('waiters', WaiterController::class);
+    
+    // Reports routes
+    Route::get('reports', [App\Http\Controllers\ReportsController::class, 'index'])->name('reports.index');
+    Route::post('reports/generate', [App\Http\Controllers\ReportsController::class, 'generate'])->name('reports.generate');
+    Route::post('reports/export', [App\Http\Controllers\ReportsController::class, 'export'])->name('reports.export');
+    
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password.update');
 });
-
 
 // Waiter routes
 Route::middleware(['auth', 'role:waiter'])->prefix('waiter')->group(function() {
+    Route::get('dashboard', [WaiterDashboardController::class, 'index'])->name('waiter.dashboard');
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::resource('sales', SaleController::class);
     // Add more waiter-specific routes here
-    Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
-    // Route::post('sales', [SaleController::class, 'store'])->name('sales.store');
 });
 
-Route::middleware(['auth','role:waiter','role:waiter'])->group(function() {
+Route::middleware(['auth','role:waiter'])->group(function() {
     Route::resource('sales', SaleController::class);
-    
 });
 
 

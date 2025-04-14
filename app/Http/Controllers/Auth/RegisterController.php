@@ -35,14 +35,14 @@ class RegisterController extends Controller
             'phone_number' => $request->restaurant_phone
         ]);
 
-        // Create manager and associate with restaurant
+        // Create manager with pending status and associate with restaurant
         Manager::create([
             'user_id' => $user->id,
-            'status' => 'active',
+            'status' => Manager::STATUS_PENDING,
             'restaurant_id' => $restaurant->id
         ]);
 
-        return redirect()->route('login')->with('success', 'Registration successful! Please login.');
+        return redirect()->route('login')->with('success', 'Inscription réussie! Votre compte manager est en attente d\'approbation par un administrateur.');
     }
     
     protected function validator(array $data)

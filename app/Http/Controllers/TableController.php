@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Table;
+use App\Models\Manager;
 use App\Http\Requests\StoreTableRequest;
 use App\Http\Requests\UpdateTableRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TableController extends Controller
 {
@@ -17,9 +19,16 @@ class TableController extends Controller
      */
     public function index()
     {
-        //
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        // Récupérer le manager associé à l'utilisateur authentifié
+        $manager = Manager::where('user_id', $user->id)->first();
+        
+        // Récupérer uniquement les tables du manager connecté
+        $tables = Table::where('manager_id', $manager->id)->paginate(5);
+        
         return view("manager.gestion.tables.index")->with([
-            "tables" => Table::paginate(5)
+            "tables" => $tables
         ]);
     }
 
@@ -37,23 +46,23 @@ class TableController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreTableRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTableRequest $request)
     {
-        //
-        //validation
-        $this->validate($request, [
-            "name" => "required|unique:tables,name",
-            "status" => "required|boolean"
-        ]);
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        // Récupérer le manager associé à l'utilisateur authentifié
+        $manager = Manager::where('user_id', $user->id)->first();
+        
         //store data
         $name = $request->name;
         Table::create([
             "name" => $name,
             "slug" => Str::slug($name),
             "status" => $request->status,
+            "manager_id" => $manager->id // Ajouter l'ID du manager
         ]);
         //redirect user
         return redirect()->route("tables.index")->with([
@@ -89,24 +98,24 @@ class TableController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Table  $table
+     * @param  \App\Http\Requests\UpdateTableRequest  $request
+     * @param  \App\Models\Table  $table
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Table $table)
+    public function update(UpdateTableRequest $request, Table $table)
     {
-        //
-        //validation
-        $this->validate($request, [
-            "name" => "required|unique:tables,name," . $table->id,
-            "status" => "required|boolean"
-        ]);
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        // Récupérer le manager associé à l'utilisateur authentifié
+        $manager = Manager::where('user_id', $user->id)->first();
+        
         //store data
         $name = $request->name;
         $table->update([
             "name" => $name,
             "slug" => Str::slug($name),
             "status" => $request->status,
+            "manager_id" => $manager->id // Ajouter l'ID du manager
         ]);
 
         return redirect()->route("tables.index")->with([

@@ -26,6 +26,7 @@ class CheckRole
         
         // Map role names to role_id values
         $roleMap = [
+            'admin' => 1,
             'manager' => 2,
             'waiter' => 3,
             // Add other roles as needed

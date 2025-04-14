@@ -13,7 +13,7 @@ class UpdateTableRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class UpdateTableRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "name" => "required|unique:tables,name," . $this->route('table')->id,
+            "status" => "required|boolean"
         ];
     }
 }

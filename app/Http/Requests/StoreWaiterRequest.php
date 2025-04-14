@@ -13,7 +13,7 @@ class StoreWaiterRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,9 +24,11 @@ class StoreWaiterRequest extends FormRequest
     public function rules()
     {
         return [
-            // "user_id" => "required|exists:users,id",
-            // "phone_number" => "required|unique:waiters,phone_number",
-            // "status" => "required|boolean"
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'phone_number' => 'required|string|max:20',
+            'status' => 'required|in:active,inactive',
         ];
     }
 }
