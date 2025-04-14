@@ -42,4 +42,28 @@ class Manager extends Model
     {
         return $this->hasMany(Waiter::class);
     }
+
+    /**
+     * Get all categories created by this manager.
+     */
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    /**
+     * Get all menus created by this manager.
+     */
+    public function menus()
+    {
+        return $this->hasMany(Menu::class);
+    }
+
+    /**
+     * Get all tables created by this manager.
+     */
+    public function tables()
+    {
+        return $this->hasMany(Table::class);
+    }
 }
