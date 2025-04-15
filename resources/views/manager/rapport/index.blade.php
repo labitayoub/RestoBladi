@@ -2,9 +2,14 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Rapports des ventes</h1>
-        <p class="text-gray-600">Générez et consultez les rapports de ventes</p>
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Rapports des ventes</h1>
+            <p class="text-gray-600">Générez et consultez les rapports de ventes</p>
+        </div>
+        <a href="{{ route('manager.dashboard') }}" class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-md transition flex items-center">
+            <i class="fas fa-arrow-left mr-2"></i>Retour
+        </a>
     </div>
 
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">

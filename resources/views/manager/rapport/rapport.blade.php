@@ -109,10 +109,7 @@
     <div class="mt-6">
         <div class="flex space-x-4">
             <a href="{{ route('reports.index') }}" class="text-orange-600 hover:text-orange-700 font-medium">
-                <i class="fas fa-arrow-left mr-2"></i>Retour aux rapports
-            </a>
-            <a href="{{ route('dashboard') }}" class="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-md text-sm font-medium transition duration-150 ease-in-out">
-                <i class="fas fa-tachometer-alt mr-2"></i>Retour au tableau de bord
+                <i class="fas fa-arrow-left mr-2"></i>Retour
             </a>
         </div>
     </div>
