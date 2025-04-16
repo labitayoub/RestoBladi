@@ -69,20 +69,29 @@ class WaiterController extends Controller
                 'role_id' => 3,
             ]);
             
-            // Create the waiter with manager_id from authenticated user
+            // Récupérer l'ID du manager à partir de l'utilisateur authentifié
+            $loggedInUser = Auth::user();
+            $manager = Manager::where('user_id', $loggedInUser->id)->first();
+            
+            if (!$manager) {
+                DB::rollback();
+                return back()->withErrors(['error' => 'Profil manager non trouvé.']);
+            }
+            
+            // Create the waiter with the correct manager_id
             Waiter::create([
                 'user_id' => $user->id,
                 'phone_number' => $request->phone_number,
                 'status' => $request->status === 'active' ? 1 : 0,
-                'manager_id' => Auth::id(),
+                'manager_id' => $manager->id, // Utiliser l'ID du manager et non l'ID de l'utilisateur
             ]);
             
             DB::commit();
             
-            return redirect()->route('waiters.index')->with('success', 'Waiter created successfully');
+            return redirect()->route('waiters.index')->with('success', 'Serveur créé avec succès');
         } catch (\Exception $e) {
             DB::rollback();
-            return back()->withErrors(['error' => 'An error occurred while creating the waiter: ' . $e->getMessage()]);
+            return back()->withErrors(['error' => 'Une erreur est survenue lors de la création du serveur: ' . $e->getMessage()]);
         }
     }
 
