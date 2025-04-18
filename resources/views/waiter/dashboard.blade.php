@@ -291,38 +291,39 @@
 </div>
 
 <script>
+    // Fonction optimisée pour rafraîchir la page avec un indicateur visuel
     function refreshPage() {
-        // Add a loading indicator
+        // Création d'un overlay pour l'indicateur de chargement
         const overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-        overlay.style.display = 'flex';
-        overlay.style.justifyContent = 'center';
-        overlay.style.alignItems = 'center';
-        overlay.style.zIndex = '9999';
+        Object.assign(overlay.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: '9999'
+        });
         
-        const spinner = document.createElement('div');
-        spinner.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x text-orange-500"></i>';
-        overlay.appendChild(spinner);
-        
+        // Ajout de l'icône de chargement
+        overlay.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x text-orange-500"></i>';
         document.body.appendChild(overlay);
         
-        // Refresh the page after a short delay
-        setTimeout(() => {
-            window.location.reload();
-        }, 500);
+        // Rafraîchissement légèrement différé pour permettre l'affichage de l'animation
+        setTimeout(() => window.location.reload(), 300);
     }
     
-    document.addEventListener('DOMContentLoaded', function() {
-        // Any dashboard-specific JavaScript can go here
+    // Initialisation lors du chargement de la page
+    document.addEventListener('DOMContentLoaded', () => {
+        // Configuration de l'auto-rafraîchissement (toutes les 5 minutes)
+        const REFRESH_INTERVAL = 5 * 60 * 1000;
+        const autoRefresh = setInterval(refreshPage, REFRESH_INTERVAL);
         
-        // Set up auto-refresh (every 5 minutes)
-        const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
-        setInterval(refreshPage, REFRESH_INTERVAL);
+        // Possibilité d'annuler l'auto-rafraîchissement si nécessaire
+        // Pour déboguer : window.stopAutoRefresh = () => clearInterval(autoRefresh);
     });
 </script>
 @endsection

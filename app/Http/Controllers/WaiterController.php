@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Waiter;
 use App\Models\User;
+use App\Models\Manager;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -20,8 +21,20 @@ class WaiterController extends Controller
      */
     public function index()
     {
-        // Get waiters with their associated users
-        $waiters = Waiter::with('user')->latest()->paginate(10);
+        // Récupérer l'utilisateur authentifié et son manager_id
+        $user = Auth::user();
+        $manager = Manager::where('user_id', $user->id)->first();
+        
+        if (!$manager) {
+            return redirect()->back()->with('error', 'Profil manager non trouvé.');
+        }
+        
+        // Get waiters with their associated users, filtered by manager_id
+        $waiters = Waiter::with('user')
+                    ->where('manager_id', $manager->id)
+                    ->latest()
+                    ->paginate(10);
+        
         return view('manager.gestion.waiters.index', compact('waiters'));
     }
 
@@ -56,20 +69,29 @@ class WaiterController extends Controller
                 'role_id' => 3,
             ]);
             
-            // Create the waiter with manager_id from authenticated user
+            // Récupérer l'ID du manager à partir de l'utilisateur authentifié
+            $loggedInUser = Auth::user();
+            $manager = Manager::where('user_id', $loggedInUser->id)->first();
+            
+            if (!$manager) {
+                DB::rollback();
+                return back()->withErrors(['error' => 'Profil manager non trouvé.']);
+            }
+            
+            // Create the waiter with the correct manager_id
             Waiter::create([
                 'user_id' => $user->id,
                 'phone_number' => $request->phone_number,
                 'status' => $request->status === 'active' ? 1 : 0,
-                'manager_id' => Auth::id(),
+                'manager_id' => $manager->id, // Utiliser l'ID du manager et non l'ID de l'utilisateur
             ]);
             
             DB::commit();
             
-            return redirect()->route('waiters.index')->with('success', 'Waiter created successfully');
+            return redirect()->route('waiters.index')->with('success', 'Serveur créé avec succès');
         } catch (\Exception $e) {
             DB::rollback();
-            return back()->withErrors(['error' => 'An error occurred while creating the waiter: ' . $e->getMessage()]);
+            return back()->withErrors(['error' => 'Une erreur est survenue lors de la création du serveur: ' . $e->getMessage()]);
         }
     }
 
@@ -81,6 +103,14 @@ class WaiterController extends Controller
      */
     public function show(Waiter $waiter)
     {
+        // Vérifier que le waiter appartient au manager connecté
+        $user = Auth::user();
+        $manager = Manager::where('user_id', $user->id)->first();
+        
+        if (!$manager || $waiter->manager_id != $manager->id) {
+            return redirect()->route('waiters.index')->with('error', 'Vous n\'avez pas l\'autorisation d\'accéder à ce serveur.');
+        }
+        
         $waiter->load('user');
         return view('manager.gestion.waiters.show', compact('waiter'));
     }
@@ -93,6 +123,14 @@ class WaiterController extends Controller
      */
     public function edit(Waiter $waiter)
     {
+        // Vérifier que le waiter appartient au manager connecté
+        $user = Auth::user();
+        $manager = Manager::where('user_id', $user->id)->first();
+        
+        if (!$manager || $waiter->manager_id != $manager->id) {
+            return redirect()->route('waiters.index')->with('error', 'Vous n\'avez pas l\'autorisation de modifier ce serveur.');
+        }
+        
         $waiter->load('user');
         return view('manager.gestion.waiters.edit', compact('waiter'));
     }
@@ -106,6 +144,14 @@ class WaiterController extends Controller
      */
     public function update(UpdateWaiterRequest $request, Waiter $waiter)
     {
+        // Vérifier que le waiter appartient au manager connecté
+        $user = Auth::user();
+        $manager = Manager::where('user_id', $user->id)->first();
+        
+        if (!$manager || $waiter->manager_id != $manager->id) {
+            return redirect()->route('waiters.index')->with('error', 'Vous n\'avez pas l\'autorisation de modifier ce serveur.');
+        }
+        
         try {
             DB::beginTransaction();
             
@@ -131,10 +177,10 @@ class WaiterController extends Controller
             
             DB::commit();
             
-            return redirect()->route('waiters.index')->with('success', 'Waiter updated successfully');
+            return redirect()->route('waiters.index')->with('success', 'Serveur mis à jour avec succès');
         } catch (\Exception $e) {
             DB::rollback();
-            return back()->withErrors(['error' => 'An error occurred while updating the waiter: ' . $e->getMessage()]);
+            return back()->withErrors(['error' => 'Une erreur est survenue lors de la mise à jour du serveur: ' . $e->getMessage()]);
         }
     }
 
@@ -146,6 +192,14 @@ class WaiterController extends Controller
      */
     public function destroy(Waiter $waiter)
     {
+        // Vérifier que le waiter appartient au manager connecté
+        $user = Auth::user();
+        $manager = Manager::where('user_id', $user->id)->first();
+        
+        if (!$manager || $waiter->manager_id != $manager->id) {
+            return redirect()->route('waiters.index')->with('error', 'Vous n\'avez pas l\'autorisation de supprimer ce serveur.');
+        }
+        
         try {
             DB::beginTransaction();
             
@@ -161,10 +215,10 @@ class WaiterController extends Controller
             
             DB::commit();
             
-            return redirect()->route('waiters.index')->with('success', 'Waiter deleted successfully');
+            return redirect()->route('waiters.index')->with('success', 'Serveur supprimé avec succès');
         } catch (\Exception $e) {
             DB::rollback();
-            return back()->withErrors(['error' => 'An error occurred while deleting the waiter: ' . $e->getMessage()]);
+            return back()->withErrors(['error' => 'Une erreur est survenue lors de la suppression du serveur: ' . $e->getMessage()]);
         }
     }
 }

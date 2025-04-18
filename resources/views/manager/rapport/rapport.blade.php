@@ -107,9 +107,11 @@
     </div>
     
     <div class="mt-6">
-        <a href="{{ route('reports.index') }}" class="text-orange-600 hover:text-orange-700 font-medium">
-            <i class="fas fa-arrow-left mr-2"></i>Retour aux rapports
-        </a>
+        <div class="flex space-x-4">
+            <a href="{{ route('reports.index') }}" class="text-orange-600 hover:text-orange-700 font-medium">
+                <i class="fas fa-arrow-left mr-2"></i>Retour
+            </a>
+        </div>
     </div>
 </div>
 @endsection

@@ -66,7 +66,7 @@
                                                     {{ $menu->price }} DH
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {{ $menu->category->title }}
+                                                    {{ $menu->category ? $menu->category->title : 'Catégorie non disponible' }}
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                     <img src="{{ asset('images/menus/'. $menu->image) }}" 

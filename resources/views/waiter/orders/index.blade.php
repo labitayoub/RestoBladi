@@ -31,7 +31,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm font-medium text-blue-600">Commandes aujourd'hui</p>
-                                    <p class="text-2xl font-bold text-gray-800">{{ \App\Models\Sale::whereDate('created_at', today())->count() ?? 0 }}</p>
+                                    <p class="text-2xl font-bold text-gray-800">{{$todayOrders}}</p>
                                 </div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm font-medium text-green-600">Ventes totales (DH)</p>
-                                    <p class="text-2xl font-bold text-gray-800">{{ \App\Models\Sale::whereDate('created_at', today())->sum('total_ttc') ?? 0 }} DH</p>
+                                    <p class="text-2xl font-bold text-gray-800">{{ $todaySales }} DH</p>
                                 </div>
                             </div>
                         </div>
@@ -95,8 +95,13 @@
                                                 
                                                 <!-- Commandes actives sur cette table -->
                                                 <div>
+                                                    @php
+                                                        // Récupérer l'ID du serveur authentifié
+                                                        $authWaiterId = App\Models\Waiter::where('user_id', Auth::id())->first()->id ?? 0;
+                                                    @endphp
+                                                    
                                                     @foreach ($table->sales as $sale)
-                                                        @if ($sale->created_at >= Carbon\Carbon::today())
+                                                        @if ($sale->created_at >= Carbon\Carbon::today() && $sale->waiter_id == $authWaiterId)
                                                         <div class="mt-3" id="{{ $sale->id }}">
                                                             <div class="bg-white border-2 border-dashed border-pink-200 rounded-lg p-5 mx-auto max-w-xs text-center text-gray-700 transform transition hover:scale-105 duration-200">
                                                                 <!-- En-tête avec nom du produit -->
@@ -411,54 +416,6 @@
                                                 <i class="fas fa-check-circle mr-1"></i> Valider la commande
                                             </button>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Daily Statistics - Enhanced -->
-                        <div class="mb-8">
-                            <h4 class="text-lg font-bold text-gray-800 mb-4">
-                                <i class="fas fa-chart-bar text-orange-500 mr-2"></i>Statistiques du jour
-                            </h4>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="bg-white p-6 rounded-lg shadow">
-                                    <h5 class="text-md font-semibold text-gray-700 mb-4 flex items-center">
-                                        <i class="fas fa-trophy text-orange-400 mr-2"></i>Menus les plus vendus
-                                    </h5>
-                                    <div class="space-y-3">
-                                        @php
-                                            $topMenus = \App\Models\Sale::with('menus')
-                                                ->whereDate('created_at', today())
-                                                ->get()
-                                                ->pluck('menus')
-                                                ->flatten()
-                                                ->groupBy('id')
-                                                ->map(function ($group) {
-                                                    return [
-                                                        'title' => $group->first()->title,
-                                                        'count' => $group->count()
-                                                    ];
-                                                })
-                                                ->sortByDesc('count')
-                                                ->take(5);
-                                        @endphp
-                                        
-                                        @forelse($topMenus as $menu)
-                                            <div class="flex justify-between items-center">
-                                                <span class="text-sm text-gray-600">{{ $menu['title'] }}</span>
-                                                <span class="font-semibold">{{ $menu['count'] }}</span>
-                                            </div>
-                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                                <div class="bg-orange-500 h-2.5 rounded-full" style="width: {{ min($menu['count'] / max($topMenus->max('count'), 1) * 100, 100) }}%"></div>
-                                            </div>
-                                        @empty
-                                            <div class="flex flex-col items-center justify-center py-6 text-gray-500">
-                                                <i class="fas fa-chart-pie text-3xl mb-2 text-gray-300"></i>
-                                                <p class="text-gray-500 text-sm">Aucune donnée disponible</p>
-                                            </div>
-                                        @endforelse
                                     </div>
                                 </div>
                             </div>

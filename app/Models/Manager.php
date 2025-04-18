@@ -10,7 +10,6 @@ class Manager extends Model
     use HasFactory;
 
     // Définition des constantes de statut
-    const STATUS_PENDING = 'pending';
     const STATUS_APPROVED = 'approved';
     const STATUS_REJECTED = 'rejected';
 

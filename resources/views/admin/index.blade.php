@@ -72,13 +72,9 @@
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                 Actif
                                             </span>
-                                        @elseif ($manager->status === 'pending')
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                                En attente
-                                            </span>
                                         @elseif ($manager->status === 'rejected')
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                                Rejeté
+                                                Inactif
                                             </span>
                                         @endif
                                     </td>
@@ -94,15 +90,8 @@
                                             @elseif ($manager->status === 'approved')
                                                 <form action="{{ route('admin.managers.reject', $manager->id) }}" method="post">
                                                     @csrf
-                                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out" title="Rejeter">
+                                                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out" title="Inactif">
                                                         <i class="fas fa-times"></i>
-                                                    </button>
-                                                </form>
-                                            @elseif ($manager->status === 'pending')
-                                                <form action="{{ route('admin.managers.approve', $manager->id) }}" method="post">
-                                                    @csrf
-                                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out" title="Approuver">
-                                                        <i class="fas fa-check"></i>
                                                     </button>
                                                 </form>
                                             @endif

@@ -55,7 +55,7 @@ class AdminController extends Controller
         $manager->status = Manager::STATUS_REJECTED;
         $manager->save();
 
-        return redirect()->route('admin.managers')->with('success', 'Le manager a été rejeté.');
+        return redirect()->route('admin.managers')->with('success', 'Le manager a été inactivé.');
     }
 
     /**

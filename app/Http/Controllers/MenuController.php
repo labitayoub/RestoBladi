@@ -26,7 +26,8 @@ class MenuController extends Controller
         $manager = Manager::where('user_id', $user->id)->first();
         
         // Récupérer uniquement les menus du manager connecté
-        $menus = Menu::where('manager_id', $manager->id)->paginate(6);
+        // Eager load the category relationship
+        $menus = Menu::with('category')->where('manager_id', $manager->id)->paginate(6);
         
         return view("manager.gestion.menus.index")->with([
             "menus" => $menus

@@ -15,24 +15,11 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@retobladi.com',
+            'name' => 'Ayoub',
+            'email' => 'admin@restobladi.com',
             'password' => bcrypt('12345678'),
             'role_id' => 1, // Admin role
         ]);
 
-        User::create([
-            'name' => 'Manager User',
-            'email' => 'manager@retobladi.com',
-            'password' => bcrypt('12345678'),
-            'role_id' => 2, // Manager role
-        ]);
-
-        User::create([
-            'name' => 'Waiter User',
-            'email' => 'waiter@retobladi.com',
-            'password' => bcrypt('12345678'),
-            'role_id' => 3, // Waiter role
-        ]);
     }
 }

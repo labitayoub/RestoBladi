@@ -104,10 +104,6 @@ Route::middleware(['auth', 'role:waiter'])->prefix('waiter')->group(function() {
     // Add more waiter-specific routes here
 });
 
-Route::middleware(['auth','role:waiter'])->group(function() {
-    Route::resource('sales', SaleController::class);
-});
-
 
 Route::fallback(function () {
     return view('errors.404');

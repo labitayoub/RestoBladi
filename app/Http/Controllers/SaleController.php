@@ -93,13 +93,15 @@ class SaleController extends Controller
         // Charger les relations nécessaires
         $sale->load(['menus', 'tables', 'waiter']);
         
-        // Récupérer toutes les tables, menus et serveurs pour les listes déroulantes
+        // Récupérer toutes les tables et menus pour les listes déroulantes
         $tables = Table::all();
         $menus = Menu::all();
-        $waiters = Waiter::with('user')->get();
+        
+        // Au lieu de récupérer tous les serveurs, on récupère uniquement le serveur connecté
+        $currentWaiter = Waiter::where('user_id', Auth::id())->first();
         
         // Retourner la vue avec les données
-        return view('waiter.sales.edit', compact('sale', 'tables', 'menus', 'waiters'));
+        return view('waiter.sales.edit', compact('sale', 'tables', 'menus', 'currentWaiter'));
     }
 
     /**
