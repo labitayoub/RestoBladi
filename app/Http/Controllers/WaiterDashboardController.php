@@ -117,6 +117,7 @@ class WaiterDashboardController extends Controller
             }
         }
         
+    
         // Pass all data to the view
         return view('waiter.dashboard', compact(
             'todayOrders', 
