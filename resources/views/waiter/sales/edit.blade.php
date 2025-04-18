@@ -135,23 +135,17 @@
                             </div>
 
                             <div>
-                                <label for="waiter_id" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="waiter_name" class="block text-sm font-medium text-gray-700 mb-2">
                                     <i class="fas fa-user-tie mr-1 text-gray-500"></i>Serveur
                                 </label>
-                                <select 
-                                    name="waiter_id" 
-                                    id="waiter_id"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                                <input 
+                                    type="text" 
+                                    id="waiter_name"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                                    value="{{ $currentWaiter->user->name }}"
+                                    readonly
                                 >
-                                    @foreach ($waiters as $waiter)
-                                        <option 
-                                            value="{{ $waiter->id }}"
-                                            {{ $sale->waiter_id == $waiter->id ? 'selected' : '' }}
-                                        >
-                                            {{ $waiter->user->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <input type="hidden" name="waiter_id" value="{{ $currentWaiter->id }}">
                             </div>
 
                             <div>
