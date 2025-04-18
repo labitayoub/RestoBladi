@@ -28,7 +28,7 @@ class OrderController extends Controller
         ->whereDate('created_at', today())
         ->count() ?? 0;
         
-        // Calculer les ventes du jour pour ce serveur (montant total)
+        // Calculer les ventes du jour pour ce serveur
         $todaySales = Sale::where('waiter_id', $waiterId)
         ->whereDate('created_at', today())
         ->sum('total_ttc') ?? 0;
