@@ -221,17 +221,6 @@
                             
                             <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                                 <div class="p-4">
-                                    <!-- Search for menus -->
-                                    <div class="mb-4">
-                                        <div class="relative">
-                                            <input type="text" id="menu-search" placeholder="Rechercher un menu..." 
-                                                class="w-full px-4 py-2 pr-8 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm">
-                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                                <i class="fas fa-search text-gray-400"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
                                     <!-- Tabs Navigation - Enhanced -->
                                     <div class="border-b border-gray-200 mb-4 flex overflow-x-auto hide-scrollbar">
                                         <nav class="flex flex-nowrap -mb-px">
@@ -476,22 +465,6 @@
                 });
             });
             
-            // Menu search functionality
-            const menuSearch = document.getElementById('menu-search');
-            menuSearch.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
-                const menuItems = document.querySelectorAll('.menu-item');
-                
-                menuItems.forEach(item => {
-                    const menuTitle = item.querySelector('.menu-title').textContent.toLowerCase();
-                    if (menuTitle.includes(searchTerm)) {
-                        item.style.display = '';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
-            
             // Calculate prices when menus are selected
             const menuCheckboxes = document.querySelectorAll('.menu-checkbox');
             menuCheckboxes.forEach(checkbox => {
@@ -582,7 +555,7 @@
             printWindow.document.close();
         }
         function refreshPage() {
-        // Add a loading indicator
+            
         const overlay = document.createElement('div');
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
@@ -598,7 +571,6 @@
         overlay.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x text-orange-500"></i>';
         document.body.appendChild(overlay);
         
-        // Refresh the page after a short delay
         setTimeout(() => {
             window.location.reload();
         }, 500);
