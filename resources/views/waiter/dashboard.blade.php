@@ -318,12 +318,8 @@
     
     // Initialisation lors du chargement de la page
     document.addEventListener('DOMContentLoaded', () => {
-        // Configuration de l'auto-rafraîchissement (toutes les 5 minutes)
-        const REFRESH_INTERVAL = 5 * 60 * 1000;
-        const autoRefresh = setInterval(refreshPage, REFRESH_INTERVAL);
-        
-        // Possibilité d'annuler l'auto-rafraîchissement si nécessaire
-        // Pour déboguer : window.stopAutoRefresh = () => clearInterval(autoRefresh);
+        // Aucune configuration d'auto-rafraîchissement
+        // Le rafraîchissement se fait uniquement via le bouton d'actualisation
     });
 </script>
 @endsection
