@@ -595,10 +595,7 @@
         overlay.style.alignItems = 'center';
         overlay.style.zIndex = '9999';
         
-        const spinner = document.createElement('div');
-        spinner.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x text-orange-500"></i>';
-        overlay.appendChild(spinner);
-        
+        overlay.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x text-orange-500"></i>';
         document.body.appendChild(overlay);
         
         // Refresh the page after a short delay
