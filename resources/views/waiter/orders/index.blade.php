@@ -95,11 +95,6 @@
                                                 
                                                 <!-- Commandes actives sur cette table -->
                                                 <div>
-                                                    @php
-                                                        // Récupérer l'ID du serveur authentifié
-                                                        $authWaiterId = App\Models\Waiter::where('user_id', Auth::id())->first()->id ?? 0;
-                                                    @endphp
-                                                    
                                                     @foreach ($table->sales as $sale)
                                                         @if ($sale->created_at >= Carbon\Carbon::today() && $sale->waiter_id == $authWaiterId)
                                                         <div class="mt-3" id="{{ $sale->id }}">
@@ -163,32 +158,16 @@
                                                                 
                                                                 <!-- Pied de page - Information du restaurant dynamique -->
                                                                 <div class="pt-3 border-t border-gray-200 text-sm text-gray-600">
-                                                                    @php
-                                                                        // Récupérer le restaurant via la relation serveur -> manager -> restaurant
-                                                                        $restaurant = null;
-                                                                        $waiter = $sale->waiter;
-                                                                        
-                                                                        if ($waiter) {
-                                                                            // Récupérer le manager à partir de l'ID manager dans la table des serveurs
-                                                                            $manager = \App\Models\Manager::find($waiter->manager_id);
-                                                                            
-                                                                            if ($manager) {
-                                                                                // Récupérer le restaurant lié à ce manager
-                                                                                $restaurant = \App\Models\Restaurant::find($manager->restaurant_id);
-                                                                            }
-                                                                        }
-                                                                    @endphp
-                                                                    
                                                                     <!-- Message de remerciement au client -->
                                                                     <div class="mb-2 font-medium italic">
                                                                         Merci pour votre visite. Au plaisir de vous revoir très bientôt!
                                                                     </div>
                                                                     
                                                                     <div class="font-semibold">
-                                                                        Restaurant {{ $restaurant ? $restaurant->name : '' }}
+                                                                        Restaurant {{ $sale->restaurant ? $sale->restaurant->name : '' }}
                                                                     </div>
-                                                                    <div>{{ $restaurant ? $restaurant->address : '' }}</div>
-                                                                    <div>{{ $restaurant ? $restaurant->phone_number : '' }}</div>
+                                                                    <div>{{ $sale->restaurant ? $sale->restaurant->address : '' }}</div>
+                                                                    <div>{{ $sale->restaurant ? $sale->restaurant->phone_number : '' }}</div>
                                                                 </div>
                                                                 
                                                                 <!-- Boutons d'action -->
