@@ -133,7 +133,7 @@
                                                                 <!-- Détails de la commande -->
                                                                 <div class="space-y-2 mb-4 text-sm">
                                                                     <div class="flex justify-between text-black">
-                                                                        <span class="font-medium">Qté :</span>
+                                                                        <span class="font-medium">Articles :</span>
                                                                         <span class="font-medium">{{ count($sale->menus) }}</span>
                                                                     </div>
                                                                     
