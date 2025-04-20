@@ -227,12 +227,12 @@
                                             @foreach ($categories as $category)
                                                 <a 
                                                     href="#{{ $category->slug }}" 
-                                                    class="inline-block py-2 px-4 border-b-2 font-medium text-sm whitespace-nowrap {{ $category->slug === 'Le dîner' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                                    class="inline-block py-2 px-4 border-b-2 font-medium text-sm whitespace-nowrap {{ $category->slug === 'le-petit-dejeuner' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
                                                     id="{{ $category->slug }}-tab"
                                                     data-toggle="pill"
                                                     role="tab"
                                                     aria-controls="{{ $category->slug }}"
-                                                    aria-selected="{{ $category->slug === 'Le dîner' ? 'true' : 'false' }}"
+                                                    aria-selected="{{ $category->slug === 'le-petit-dejeuner' ? 'true' : 'false' }}"
                                                 >
                                                     <i class="fas fa-utensils mr-1 text-xs"></i>{{ $category->title }}
                                                 </a>
@@ -244,7 +244,7 @@
                                     <div class="tab-content">
                                         @foreach ($categories as $category)
                                             <div 
-                                                class="tab-pane {{ $category->slug === 'Le dîner' ? 'block' : 'hidden' }}"
+                                                class="tab-pane {{ $category->slug === 'le-petit-dejeuner' ? 'block' : 'hidden' }}"
                                                 id="{{ $category->slug }}"
                                                 role="tabpanel"
                                                 aria-labelledby="{{ $category->slug }}-tab"
