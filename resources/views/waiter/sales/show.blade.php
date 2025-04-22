@@ -29,16 +29,6 @@
                     <div class="space-y-2">
                         <p class="text-sm text-gray-600">
                             <span class="font-medium">Serveur:</span> 
-                            @php
-                                $waiterId = $sale->waiter_id ?? null;
-                                $waiterName = 'N/A';
-                                if ($waiterId) {
-                                    $waiter = App\Models\Waiter::find($waiterId);
-                                    if ($waiter && $waiter->user) {
-                                        $waiterName = $waiter->user->name;
-                                    }
-                                }
-                            @endphp
                             {{ $waiterName }}
                         </p>
                         <p class="text-sm text-gray-600">
@@ -126,15 +116,8 @@
                                 
                                 @if(isset($menu->category_id))
                                 <div class="flex flex-wrap gap-2 mb-3">
-                                    @php
-                                        $categoryName = 'Non catégorisé';
-                                        $category = App\Models\Category::find($menu->category_id);
-                                        if ($category) {
-                                            $categoryName = $category->title;
-                                        }
-                                    @endphp
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                        {{ $categoryName }}
+                                        {{ $menu->categoryName }}
                                     </span>
                                 </div>
                                 @endif
@@ -159,10 +142,4 @@
     </div>
 </div>
 
-<script>
-    function printReceipt(id) {
-        const printWindow = window.open(`/sales/${id}/receipt`, '_blank');
-        printWindow.focus();
-    }
-</script>
 @endsection

@@ -470,7 +470,6 @@
                 document.getElementById('total_ttc').value = totalTTC.toFixed(2);
             }
             
-            // Fixed undefined function refreshPage by adding a simple implementation
     
         }
     );
