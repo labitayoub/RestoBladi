@@ -100,6 +100,15 @@
                                             <a href="{{ route('admin.managers.show', $manager->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out">
                                                 <i class="fas fa-eye"></i>
                                             </a>
+                                            
+                                            <!-- Bouton de suppression -->
+                                            <form action="{{ route('admin.managers.destroy', $manager->id) }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce manager ?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="bg-gray-800 hover:bg-gray-900 text-white py-1 px-3 rounded-md text-sm transition duration-150 ease-in-out" title="Supprimer">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>

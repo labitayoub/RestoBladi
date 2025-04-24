@@ -70,6 +70,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function() {
     Route::post('managers/{id}/approve', [AdminController::class, 'approveManager'])->name('admin.managers.approve');
     Route::post('managers/{id}/reject', [AdminController::class, 'rejectManager'])->name('admin.managers.reject');
     Route::post('managers/{id}/reset', [AdminController::class, 'resetManagerStatus'])->name('admin.managers.reset');
+    Route::delete('managers/{id}', [AdminController::class, 'destroyManager'])->name('admin.managers.destroy');
 });
 
 Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function() {
