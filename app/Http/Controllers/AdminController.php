@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -68,5 +69,34 @@ class AdminController extends Controller
         $manager->save();
 
         return redirect()->route('admin.managers')->with('success', 'Le statut du manager a été réinitialisé à "approuvé".');
+    }
+    
+    /**
+     * Supprimer un manager et son compte utilisateur associé
+     */
+    public function destroyManager($id)
+    {
+        try {
+            DB::beginTransaction();
+            
+            // Récupérer le manager avec son utilisateur
+            $manager = Manager::with('user')->findOrFail($id);
+            
+            // Récupérer l'ID de l'utilisateur avant de supprimer le manager
+            $userId = $manager->user->id;
+            
+            // Supprimer le manager
+            $manager->delete();
+            
+            // Supprimer l'utilisateur associé
+            User::destroy($userId);
+            
+            DB::commit();
+            
+            return redirect()->route('admin.managers')->with('success', 'Le compte manager a été supprimé avec succès.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('admin.managers')->with('error', 'Erreur lors de la suppression du manager : ' . $e->getMessage());
+        }
     }
 }

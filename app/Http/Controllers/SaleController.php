@@ -79,7 +79,26 @@ class SaleController extends Controller
     public function show(Sale $sale)
     {
         $sale->load(['menus', 'tables', 'waiter']); // Charger les relations nécessaires
-        return view('waiter.sales.show', compact('sale')); // Retourner la vue avec les données
+        
+        // Préparer le nom du serveur pour la vue
+        $waiterName = 'N/A';
+        if ($sale->waiter && $sale->waiter->user) {
+            $waiterName = $sale->waiter->user->name;
+        }
+        
+        // Préparer les catégories pour chaque menu
+        foreach ($sale->menus as $menu) {
+            $categoryName = 'Non catégorisé';
+            if (isset($menu->category_id)) {
+                $category = \App\Models\Category::find($menu->category_id);
+                if ($category) {
+                    $categoryName = $category->title;
+                }
+            }
+            $menu->categoryName = $categoryName;
+        }
+        
+        return view('waiter.sales.show', compact('sale', 'waiterName')); // Retourner la vue avec les données
     }
 
     /**

@@ -32,6 +32,7 @@
                         </h4>
                         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             @foreach ($tables as $table)
+                            @if($table->status==1)
                                 <div class="bg-white rounded-lg shadow border p-4 transition duration-200 hover:shadow-lg hover:border-orange-300">
                                     <div class="flex justify-between items-center mb-2">
                                         <span class="font-semibold text-lg text-gray-700">{{ $table->name }}</span>
@@ -47,6 +48,7 @@
                                         <i class="fas fa-chair text-4xl text-gray-500 mb-2"></i>
                                     </div>
                                 </div>
+                            @endif
                             @endforeach
                         </div>
                     </div>

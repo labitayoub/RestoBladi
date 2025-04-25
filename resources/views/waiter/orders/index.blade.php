@@ -95,11 +95,6 @@
                                                 
                                                 <!-- Commandes actives sur cette table -->
                                                 <div>
-                                                    @php
-                                                        // Récupérer l'ID du serveur authentifié
-                                                        $authWaiterId = App\Models\Waiter::where('user_id', Auth::id())->first()->id ?? 0;
-                                                    @endphp
-                                                    
                                                     @foreach ($table->sales as $sale)
                                                         @if ($sale->created_at >= Carbon\Carbon::today() && $sale->waiter_id == $authWaiterId)
                                                         <div class="mt-3" id="{{ $sale->id }}">
@@ -133,7 +128,7 @@
                                                                 <!-- Détails de la commande -->
                                                                 <div class="space-y-2 mb-4 text-sm">
                                                                     <div class="flex justify-between text-black">
-                                                                        <span class="font-medium">Qté :</span>
+                                                                        <span class="font-medium">Articles :</span>
                                                                         <span class="font-medium">{{ count($sale->menus) }}</span>
                                                                     </div>
                                                                     
@@ -163,32 +158,16 @@
                                                                 
                                                                 <!-- Pied de page - Information du restaurant dynamique -->
                                                                 <div class="pt-3 border-t border-gray-200 text-sm text-gray-600">
-                                                                    @php
-                                                                        // Récupérer le restaurant via la relation serveur -> manager -> restaurant
-                                                                        $restaurant = null;
-                                                                        $waiter = $sale->waiter;
-                                                                        
-                                                                        if ($waiter) {
-                                                                            // Récupérer le manager à partir de l'ID manager dans la table des serveurs
-                                                                            $manager = \App\Models\Manager::find($waiter->manager_id);
-                                                                            
-                                                                            if ($manager) {
-                                                                                // Récupérer le restaurant lié à ce manager
-                                                                                $restaurant = \App\Models\Restaurant::find($manager->restaurant_id);
-                                                                            }
-                                                                        }
-                                                                    @endphp
-                                                                    
                                                                     <!-- Message de remerciement au client -->
                                                                     <div class="mb-2 font-medium italic">
                                                                         Merci pour votre visite. Au plaisir de vous revoir très bientôt!
                                                                     </div>
                                                                     
                                                                     <div class="font-semibold">
-                                                                        Restaurant {{ $restaurant ? $restaurant->name : '' }}
+                                                                        Restaurant {{ $sale->restaurant ? $sale->restaurant->name : '' }}
                                                                     </div>
-                                                                    <div>{{ $restaurant ? $restaurant->address : '' }}</div>
-                                                                    <div>{{ $restaurant ? $restaurant->phone_number : '' }}</div>
+                                                                    <div>{{ $sale->restaurant ? $sale->restaurant->address : '' }}</div>
+                                                                    <div>{{ $sale->restaurant ? $sale->restaurant->phone_number : '' }}</div>
                                                                 </div>
                                                                 
                                                                 <!-- Boutons d'action -->
@@ -221,29 +200,18 @@
                             
                             <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                                 <div class="p-4">
-                                    <!-- Search for menus -->
-                                    <div class="mb-4">
-                                        <div class="relative">
-                                            <input type="text" id="menu-search" placeholder="Rechercher un menu..." 
-                                                class="w-full px-4 py-2 pr-8 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm">
-                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                                <i class="fas fa-search text-gray-400"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
                                     <!-- Tabs Navigation - Enhanced -->
                                     <div class="border-b border-gray-200 mb-4 flex overflow-x-auto hide-scrollbar">
                                         <nav class="flex flex-nowrap -mb-px">
                                             @foreach ($categories as $category)
                                                 <a 
                                                     href="#{{ $category->slug }}" 
-                                                    class="inline-block py-2 px-4 border-b-2 font-medium text-sm whitespace-nowrap {{ $category->slug === 'Le dîner' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
+                                                    class="inline-block py-2 px-4 border-b-2 font-medium text-sm whitespace-nowrap {{ $category->slug === 'le-petit-dejeuner' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}"
                                                     id="{{ $category->slug }}-tab"
                                                     data-toggle="pill"
                                                     role="tab"
                                                     aria-controls="{{ $category->slug }}"
-                                                    aria-selected="{{ $category->slug === 'Le dîner' ? 'true' : 'false' }}"
+                                                    aria-selected="{{ $category->slug === 'le-petit-dejeuner' ? 'true' : 'false' }}"
                                                 >
                                                     <i class="fas fa-utensils mr-1 text-xs"></i>{{ $category->title }}
                                                 </a>
@@ -255,7 +223,7 @@
                                     <div class="tab-content">
                                         @foreach ($categories as $category)
                                             <div 
-                                                class="tab-pane {{ $category->slug === 'Le dîner' ? 'block' : 'hidden' }}"
+                                                class="tab-pane {{ $category->slug === 'le-petit-dejeuner' ? 'block' : 'hidden' }}"
                                                 id="{{ $category->slug }}"
                                                 role="tabpanel"
                                                 aria-labelledby="{{ $category->slug }}-tab"
@@ -476,22 +444,6 @@
                 });
             });
             
-            // Menu search functionality
-            const menuSearch = document.getElementById('menu-search');
-            menuSearch.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
-                const menuItems = document.querySelectorAll('.menu-item');
-                
-                menuItems.forEach(item => {
-                    const menuTitle = item.querySelector('.menu-title').textContent.toLowerCase();
-                    if (menuTitle.includes(searchTerm)) {
-                        item.style.display = '';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
-            
             // Calculate prices when menus are selected
             const menuCheckboxes = document.querySelectorAll('.menu-checkbox');
             menuCheckboxes.forEach(checkbox => {
@@ -518,7 +470,6 @@
                 document.getElementById('total_ttc').value = totalTTC.toFixed(2);
             }
             
-            // Fixed undefined function refreshPage by adding a simple implementation
     
         }
     );
@@ -582,7 +533,7 @@
             printWindow.document.close();
         }
         function refreshPage() {
-        // Add a loading indicator
+            
         const overlay = document.createElement('div');
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
@@ -595,13 +546,9 @@
         overlay.style.alignItems = 'center';
         overlay.style.zIndex = '9999';
         
-        const spinner = document.createElement('div');
-        spinner.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x text-orange-500"></i>';
-        overlay.appendChild(spinner);
-        
+        overlay.innerHTML = '<i class="fas fa-spinner fa-spin fa-3x text-orange-500"></i>';
         document.body.appendChild(overlay);
         
-        // Refresh the page after a short delay
         setTimeout(() => {
             window.location.reload();
         }, 500);

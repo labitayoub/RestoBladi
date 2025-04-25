@@ -3,18 +3,24 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Role;
-use App\Models\Waiter;
-use App\Models\Manager;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Repositories\Interfaces\AuthRepositoryInterface;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class LoginController extends Controller
 {
+    protected $authRepository;
+    protected $userRepository;
+
+    public function __construct(
+        AuthRepositoryInterface $authRepository,
+        UserRepositoryInterface $userRepository
+    ) {
+        $this->authRepository = $authRepository;
+        $this->userRepository = $userRepository;
+    }
 
     public function showLoginForm()
     {
@@ -24,14 +30,12 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {
         // Check if the user exists first
-        $user = User::where('email', $request->email)->first();
+        $user = $this->userRepository->findByEmail($request->email);
         
         if ($user) {
             // Check if user is a manager with non-approved status
-            if ($user->role_id == 2) { // role_id 2 is for managers
-                $manager = Manager::where('user_id', $user->id)->first();
-                
-                if ($manager && $manager->status !== Manager::STATUS_APPROVED) {
+            if ($this->userRepository->isManager($user)) {
+                if (!$this->authRepository->isManagerApproved($user)) {
                     return back()->withErrors([
                         'email' => 'Votre compte manager est en attente d\'approbation par un administrateur.',
                     ]);
@@ -39,10 +43,8 @@ class LoginController extends Controller
             }
             
             // Check if user is a waiter with inactive status
-            if ($user->role_id == 3) { // role_id 3 is for waiters
-                $waiter = Waiter::where('user_id', $user->id)->first();
-                
-                if ($waiter && !$waiter->status) {
+            if ($this->userRepository->isWaiter($user)) {
+                if (!$this->authRepository->isWaiterActive($user)) {
                     return back()->withErrors([
                         'email' => 'Votre compte est en attente d\'activation par un manager.',
                     ]);
@@ -50,7 +52,7 @@ class LoginController extends Controller
             }
         }
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if ($this->authRepository->attempt($request->only('email', 'password'))) {
             $request->session()->regenerate();
             return redirect()->route('dashboard');
         }
@@ -62,10 +64,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        Session::flush();
-
-        Auth::logout();
-
+        $this->authRepository->logout();
         return redirect('login')->with('success', 'Vous êtes bien déconnecté.');
     }
 }

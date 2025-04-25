@@ -24,15 +24,12 @@ class CheckRole
 
         $user = Auth::user();
         
-        // Map role names to role_id values
         $roleMap = [
             'admin' => 1,
             'manager' => 2,
             'waiter' => 3,
-            // Add other roles as needed
         ];
         
-        // Check if user has the required role
         if (!isset($roleMap[$role]) || $user->role_id != $roleMap[$role]) {
             return redirect()->route('dashboard')
                 ->with('error', 'You do not have permission to access this page.');
